@@ -73,10 +73,10 @@ void setup() {
 ```
 
 The `.init()` method returns -1 in case the sensor initialization fails, this can be used to catch any errors that may occur.
-This (default) initialization should work in most cases, but in case you need to change any of the sensors' settings, please refer to the section Library reference on details of how to correctly initialize each of the supported sensors.
+This (default) initialization should work in most cases, but in case you need to change any of the sensors' settings, please refer to the section [Library reference](#library-reference) on details of how to correctly initialize each of the supported sensors.
 
 After all the sensor have been succefully initialized, you can access their data by calling `.measure()` method.
-Please note that the return data types vary for each of the sensors, for details on all of them, please refer to the section Library reference.
+Please note that the return data types vary for each of the sensors, for details on all of them, please refer to the section [Library reference](#library-reference).
 
 ```c++
 #define INCLUDE_KX022_1020
