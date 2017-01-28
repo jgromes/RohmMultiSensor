@@ -1,2 +1,2 @@
-*.ino linguist-language=Arduino
+*.ino linguist-language=arduino
 *.h linguist-language=c++
