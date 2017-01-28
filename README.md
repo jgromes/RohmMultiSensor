@@ -239,3 +239,14 @@ void loop() {
   * `float ML8511A::measure(void)` The measurement function.
   
     The output data type is a single `float` numbers. The output is in mW/cm^2.
+
+## Notes
+1. When using the BD7411G Hall sensor, be sure to disconnect the sensor from the shield before uploading the sketch!
+  Since BD7411G's OUT pin is directly connected to Arduino D0 (serial RX), any attempt to upload with the sensor connected will lead to out_of_sync() error.
+  
+2. The interrupt settings on the shield are following:  
+  J3 jumper connects interrupts to Arduino interrupt 0 (pin D2)  
+  J4 jumper connects interrupts to Arduino interrupt 1 (pin D3)  
+  INTRx pins on J3 and J4 are used to connect CMOS output interrupts for sensors KX022_1020 and BM1422GMV  
+  INTx pins on J3 and J4 are used to connect interrupts which require external pull-up, these are for sensors BH1745NUC and BM1422GMV
+  J16 jumper is ON/OFF switch for the pull-up, when shorted, it will be ON: the pull-up resistor is 1kΩ, the logic HIGH will be 5V.
