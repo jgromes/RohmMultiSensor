@@ -73,10 +73,10 @@ void setup() {
 ```
 
 The `.init()` method returns -1 in case the sensor initialization fails, this can be used to catch any errors that may occur.
-This (default) initialization should work in most cases, but in case you need to change any of the sensors' settings, please refer to the section [Library reference](#library-reference) on details of how to correctly initialize each of the supported sensors.
+This (default) initialization should work in most cases, but in case you need to change any of the sensors' settings, please refer to the [Library reference](#library-reference) on details of how to correctly initialize each of the supported sensors.
 
 After all the sensor have been succefully initialized, you can access their data by calling `.measure()` method.
-Please note that the return data types vary for each of the sensors, for details on all of them, please refer to the section [Library reference](#library-reference).
+Please note that the return data types vary for each of the sensors, for details on all of them, please refer to the [Library reference](#library-reference).
 
 ```c++
 #define INCLUDE_KX022_1020
@@ -156,7 +156,7 @@ void loop() {
     
   * `int BM1422GMV::init(void func(void), uint8_t mode, uint8_t rate, uint8_t output, uint8_t avg)` The initialization function.
   
-    `void func(void)` The interrupt service routine, see `examples/BM1422GMV` for details.  
+    `void func(void)` The interrupt service routine, see `/examples/BM1422GMV` and [Notes](#notes) for details on how to use interrupts.  
     `uint8_t mode = BM1422GMV_MODE_SINGLE` Default value, single measurement mode.  
     `uint8_t mode = BM1422GMV_MODE_CONTINUOUS` Continuous measurement mode.  
     `uint8_t rate = BM1422GMV_OUTPUT_RATE_10_HZ` Default value, data output rate is 10 Hz.  
