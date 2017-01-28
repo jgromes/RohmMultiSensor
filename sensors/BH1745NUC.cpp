@@ -68,10 +68,10 @@ class BH1745NUC {
     uint16_t* measure(void) {
       uint16_t* value = new uint16_t[4];
       
-      value[0] = ((uint_least16_t)_utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_LSB);
-      value[1] = ((uint_least16_t)_utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_LSB);
-      value[2] = ((uint_least16_t)_utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_LSB);
-      value[3] = ((uint_least16_t)_utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_LSB);
+      value[0] = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_LSB);
+      value[1] = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_LSB);
+      value[2] = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_LSB);
+      value[3] = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_LSB);
       
       return(value);
     }
