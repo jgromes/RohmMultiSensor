@@ -1,3 +1,2 @@
 examples/* linguist-documentation=false
-*.ino linguist-language=arduino
 *.h linguist-language=c++
