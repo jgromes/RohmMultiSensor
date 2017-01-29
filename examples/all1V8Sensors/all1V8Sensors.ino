@@ -1,7 +1,7 @@
 /*
  * All 1.8 V sensors example
  * 
- * This sketch shows you how to use all 1.8 V ROHM sensor simultaneously.
+ * This sketch shows you how to use all 1.8 V ROHM sensors simultaneously.
  * 
  * Before powering up your Arduino, make sure to select 1.8V on jumper J15 on the shield!
  */

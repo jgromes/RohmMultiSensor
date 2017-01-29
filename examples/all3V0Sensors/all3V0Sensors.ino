@@ -1,7 +1,7 @@
 /*
  * All 3.0 V sensors example
  * 
- * This sketch shows you how to use all 3.0 V ROHM sensor simultaneously.
+ * This sketch shows you how to use all 3.0 V ROHM sensors simultaneously.
  * 
  * Before powering up your Arduino, make sure to select 3V on jumper J15 on the shield!
  */
