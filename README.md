@@ -279,4 +279,4 @@ void loop() {
   
   Example: If we want to use the BM1422GMV magnetometer, we can connect it to the header I2C_1. Since BM1422GMV doesn't need an external pull-up, we can directly short INTR1 on J3 if we want to use Arduino interrupt 0 (default setting), or INTR1 on J4 if we want to use Arduino interrupt 1. See `/examples/BM1422GMV` for details.
 
-3. When using the BH1790GLC, make sure that you are not trying to read the data faster than the `readCycle` frequency. For example, if you leave the default value, you have to wait at least 1/32 s bafore accessing the data again.
+3. When using the BH1790GLC, make sure that you are not trying to read the data faster than the `readCycle` frequency. For example, if you leave the default value, you have to wait at least 1/32 seconds before accessing the sensor again.
