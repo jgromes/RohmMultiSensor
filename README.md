@@ -8,13 +8,9 @@ This library is an alternative for the libraries provided by ROHM. See [ROHM web
 
 Main purpose of this library is to allow easier, more lightweight interfacing with ROHM sensors.
 
-When using all 8 currently supported sensors with RohmMultiSensor and a simple serial output, the sketch after compilation (for Arduino UNO) uses only 8848 bytes of storage space and 545 bytes of dynamic memory.
+When using all currently supported sensors with RohmMultiSensor and a simple serial output, the sketch after compilation (for Arduino UNO) uses 20% less program storage space and 30% less dynamic memory that the libraries provided by ROHM need!
 
-In comparison, when using original libraries provided by ROHM, a sketch with the same functionality will take 11 126 bytes of Arduino storage space and 768 bytes of dynamic memory (again, on Arduino UNO).
-
-This means that while maintaining the same function, RohmAltLib needs only 80% of storage space and 70% of dynamic memory that ROHM libraries need!
-
-Furthemore, RohmMultiSensor is a single library, as opposed to ROHM-provided 8 libraries.
+Furthemore, RohmMultiSensor is a single library, as opposed to ROHM-provided one-library-per-sensor.
 
 Finally, this library is compliant with Arduino IDE 1.5 specification.
 
