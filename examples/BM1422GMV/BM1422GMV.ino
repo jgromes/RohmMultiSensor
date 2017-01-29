@@ -41,8 +41,8 @@ void setup() {
   Wire.begin();
 
   // initialize BM1422GMV with the default values
-  // note that we have to provide the interrupt service routine to the .init() method
-  mag.init(isr);
+  // note that we have to provide a pointer to the interrupt service routine for the .init() method
+  mag.init(*isr);
 
   Serial.println("X[uT]\tY[uT]\tZ[uT]");
 }
