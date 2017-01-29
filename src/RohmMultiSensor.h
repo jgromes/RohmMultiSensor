@@ -10,7 +10,7 @@
   #include <Wire.h>
   
   #include "../sensors/utilities.cpp"
-
+  
   #ifdef INCLUDE_KX022_1020
     #include "../sensors/KX022_1020.cpp"
   #endif
@@ -42,5 +42,9 @@
   #ifdef INCLUDE_ML8511A
     #include "../sensors/ML8511A.cpp"
   #endif
-
+  
+  #ifdef INCLUDE_BH1790GLC
+    #include "../sensors/BH1790GLC.cpp"
+  #endif
+  
 #endif

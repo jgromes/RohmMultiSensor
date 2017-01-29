@@ -70,6 +70,10 @@ measure	KEYWORD1
 init	KEYWORD1
 measure	KEYWORD1
 
+#BH1790GLC
+init	KEYWORD1
+measure	KEYWORD1
+
 #######################################
 # Constants (LITERAL1)
 #######################################
