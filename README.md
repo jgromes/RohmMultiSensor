@@ -29,6 +29,7 @@ The following is a list of currently supported sensors:
 * BD7411G
 * BD1020HFV
 * ML8511A
+* BH1790GLC
 
 For any sensor that will be used in the Arduino sketch, the following has to be defined BEFORE the library header file inclusion. The `<sensor_name>` is the same as in the list above.
 
@@ -242,7 +243,7 @@ void loop() {
 * ML8511A
   * `ML8511A::ML8511A(void)` The default constructor.
   
-  * `int ML8511A::init(uint8_t position = ANALOG_1)` The initialization function.
+  * `int ML8511A::init(uint8_t position)` The initialization function.
   
     `position = ANALOG_1` Default value, in case the sensor is connected to ANALOG_1 pin header on the shield.  
     `position = ANALOG_2` In case the sensor is connected to ANALOG_2 pin header on the shield.
@@ -250,6 +251,24 @@ void loop() {
   * `float ML8511A::measure(void)` The measurement function.
   
     The output data type is a single `float` numbers. The output is in mW/cm^2.
+
+* BH1790GLC
+  * `BH1790GLC::BH1790GLC(uint8_t address)` The default constructor.
+  
+    `address = BH1790GLC_DEVICE_ADDRESS` Default value, the default I2C address.
+  
+  * `int BH1790GLC::init(uint8_t readCycle, uint8_t ledCurrent)` The initialization function.
+  
+    `readCycle = BH1790GLC_RCYCLE_32_HZ` Default value, this is the maximum frequency at which you can access the data (32 Hz).  
+    `readCycle = BH1790GLC_RCYCLE_64_HZ` 64 Hz data access frequency. See [Notes](#notes) for details.  
+    `ledCurrent = BH1790GLC_LED_CURRENT_6_MA` Default value, the current for the LED diodes is 6 mA.  
+    `ledCurrent = BH1790GLC_LED_CURRENT_<n>_MA` Other possible values in mA, see `/sensors/BH1790GLC.cpp` for details.
+    
+  * `int* BH1790GLC::measure(void)` The measurement function.
+  
+    The output data type is a pointer to an array of 2 `int` numbers. The first element is `LEDON` data, the second is `LEDOFF` data, see datasheet for details.  
+    IMPORTANT: The array is allocated dynamically, and therefore has to be deleted with `delete[]` after usage. This is to prevent memory leak.
+
 
 ## Notes
 1. When using the BD7411G Hall sensor, be sure to disconnect the sensor from the shield before uploading the sketch!
@@ -263,3 +282,5 @@ void loop() {
   * J16 jumper is ON/OFF switch for the pull-up, when shorted, it will be ON: the pull-up resistor is 1kΩ, the logic HIGH will be 5V.
   
   Example: If we want to use the BM1422GMV magnetometer, we can connect it to the header I2C_1. Since BM1422GMV doesn't need an external pull-up, we can directly short INTR1 on J3 if we want to use Arduino interrupt 0 (default setting), or INTR1 on J4 if we want to use Arduino interrupt 1. See `/examples/BM1422GMV` for details.
+
+3. When using the BH1790GLC, make sure that you are not trying to read the data faster than the `readCycle` frequency. For example, if you leave the default value, you have to wait at least 1/32 s bafore accessing the data again.
