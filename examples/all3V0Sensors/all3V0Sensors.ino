@@ -7,12 +7,7 @@
  */
 
 // define all the sensors we will use
-#define INCLUDE_KX022_1020
-#define INCLUDE_BM1383GLV
-#define INCLUDE_RPR_0521RS
-#define INCLUDE_BH1745NUC
-#define INCLUDE_BD1020HFV
-#define INCLUDE_ML8511A
+#define INCLUDE_ALL_3V0_SENSORS
 
 // include the library
 #include <RohmMultiSensor.h>
