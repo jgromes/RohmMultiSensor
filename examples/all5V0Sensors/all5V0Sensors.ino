@@ -10,8 +10,7 @@
  */
 
 // define all the sensors we will use
-#define INCLUDE_BD7411G
-#define INCLUDE_BD1020HFV
+#define INCLUDE_ALL_5V0_SENSORS
 
 // include the library
 #include <RohmMultiSensor.h>
