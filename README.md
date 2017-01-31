@@ -4,7 +4,7 @@
 
 DISCLAIMER: This library is provided 'AS IS'. See `license.txt` for details.
 
-This library is an alternative for the libraries provided by ROHM. See [ROHM webpage](http://www.rohm.com/web/global/sensor-shield-support) for details on the ROHM Sensor Evaluation Kit.
+This library is an alternative to the libraries provided by ROHM. See [ROHM webpage](http://www.rohm.com/web/global/sensor-shield-support) for details on the ROHM Sensor Evaluation Kit.
 
 Main purpose of this library is to allow easier, more lightweight interfacing with ROHM sensors.
 
