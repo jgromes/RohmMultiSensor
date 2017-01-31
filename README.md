@@ -47,7 +47,17 @@ For example, if you want to interface with KX022-1020 accelerometer and BM1383 p
 
 IMPORTANT: You will not be able to use any sensors for which you have not provided the `#define`! This is to ensure that only the required sensors are included, reducing overall program size.
 
-Every sensor's class has to be instantiated beofre use. The class name is the same as the sensor name used in the list of the supported sensors. In the example above:
+Alternatively, you can `#define` all the sensors that shaer the same supply voltage. In this example, we will include all sensors that run on 1.8 V:
+
+```c++
+#define INCLUDE_ALL_1V8_SENSORS
+
+#include <RohmMultiSensor.h>
+```
+
+Other possibilities are: `INCLUDE_ALL_3V0_SENSORS` or `INCLUDE_ALL_5V0_SENSORS` for 3 V or 5 V sensors.
+
+Every sensor's class has to be instantiated before use. The class name is the same as the sensor name used in the list of the supported sensors. If we continue with the example:
 
 ```c++
 #define INCLUDE_KX022_1020
