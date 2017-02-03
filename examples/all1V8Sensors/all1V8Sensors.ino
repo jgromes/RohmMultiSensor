@@ -35,7 +35,7 @@ void setup() {
   // initialize all the sensor with default values.
   acc.init();
   bar.init();
-  mag.init(*isr);
+  mag.init(isr);
 
   Serial.println("X[g]\tY[g]\tZ[g]\tp[hPa]\tX[uT]\tY[uT]\tZ[uT]");
 }
