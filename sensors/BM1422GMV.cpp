@@ -82,7 +82,7 @@ class BM1422GMV {
       _address = address;
     }
     
-    int init(void (*f)(), uint8_t mode = BM1422GMV_MODE_SINGLE, uint8_t rate = BM1422GMV_OUTPUT_RATE_10_HZ, uint8_t output = BM1422GMV_OUTPUT_14_BIT, uint8_t avg = BM1422GMV_AVERAGE_4) {
+    int init(void func(void), uint8_t mode = BM1422GMV_MODE_SINGLE, uint8_t rate = BM1422GMV_OUTPUT_RATE_10_HZ, uint8_t output = BM1422GMV_OUTPUT_14_BIT, uint8_t avg = BM1422GMV_AVERAGE_4) {
       if(_utils.getRegValue(_address, BM1422GMV_REG_WHO_AM_I) != BM1422GMV_WHO_AM_I) {
         return(-1);
       }
@@ -100,7 +100,7 @@ class BM1422GMV {
       _utils.setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_LOW, 3, 2);
       _utils.setRegValue(_address, BM1422GMV_REG_AVE_A, BM1422GMV_AVERAGE_4, 4, 2);
       
-      attachInterrupt(_intNum, f, FALLING);
+      attachInterrupt(_intNum, func, FALLING);
       
       return(0);
     }
