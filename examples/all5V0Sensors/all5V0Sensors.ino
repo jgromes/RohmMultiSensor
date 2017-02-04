@@ -6,7 +6,7 @@
  * Before powering up your Arduino, make sure to select 5V on jumper J15 on the shield!
  * 
  * NOTE: When using BD7411G Hall sensor with Arduino UNO, be sure to disconnect the sensor from the shield before uploading the sketch!
- *       Since BD7411G's OUT pin is directly connected to Arduino D0 (serial RX), any attempt to upload with the sensor connected will lead to out_of_sync() error.
+ *       Since BD7411G's OUT pin is directly connected to Arduino D0 (serial RX), any attempt to upload with the sensor connected will lead to avrdude: stk500_getsync() error.
  */
 
 // define all the sensors we will use
