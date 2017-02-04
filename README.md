@@ -278,7 +278,7 @@ void loop() {
 
 ## Notes
 1. When using the BD7411G Hall sensor, be sure to disconnect the sensor from the shield before uploading the sketch!
-  Since BD7411G's OUT pin is directly connected to Arduino D0 (serial RX), any attempt to upload with the sensor connected will lead to out_of_sync() error.
+  Since BD7411G's OUT pin is directly connected to Arduino D0 (serial RX), any attempt to upload with the sensor connected will lead to avrdude: stk500_getsync() error.
   
 2. The interrupt settings on the shield are following:  
   * J3 jumper connects interrupts to Arduino interrupt 0 (pin D2)  
