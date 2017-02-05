@@ -79,9 +79,9 @@ class RPR_0521RS {
       _address = address;
     }
     
-    int init(uint8_t measurementTime = RPR_0521RS_MEAS_TIME_100_MS_100_MS, uint8_t ledCurrent = RPR_0521RS_LED_CURRENT_100_MA) {
+    uint8_t init(uint8_t measurementTime = RPR_0521RS_MEAS_TIME_100_MS_100_MS, uint8_t ledCurrent = RPR_0521RS_LED_CURRENT_100_MA) {
       if((_utils.getRegValue(_address, RPR_0521RS_REG_SYSTEM_CONTROL, 5, 0) != RPR_0521RS_PART_ID) || (_utils.getRegValue(_address, RPR_0521RS_REG_MANUFACT_ID) != RPR_0521RS_MANUFACT_ID)) {
-        return(-1);
+        return(1);
       }
       _utils.setRegValue(_address, RPR_0521RS_REG_ALS_PS_CONTROL, RPR_0521RS_ALS_DATA0_GAIN_1 | RPR_0521RS_ALS_DATA1_GAIN_1 | ledCurrent);
       _utils.setRegValue(_address, RPR_0521RS_REG_PS_CONTROL, RPR_0521RS_PS_GAIN_1, 5, 4);
