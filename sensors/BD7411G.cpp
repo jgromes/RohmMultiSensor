@@ -5,8 +5,9 @@ class BD7411G {
   public:
     BD7411G(void) {}
     
-    int init(uint8_t pin = 0) {
+    uint8_t init(uint8_t pin = 0) {
       _pin = pin;
+      return 0;
     }
     
     bool measure() {
