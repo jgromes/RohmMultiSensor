@@ -8,8 +8,9 @@ class BD1020HFV {
   public:
     BD1020HFV(void) {}
     
-    int init(uint8_t position = ANALOG_1) {
+    uint8_t init(uint8_t position = ANALOG_1) {
       _position = position;
+      return 0;
     }
     
     float measure(void) {
