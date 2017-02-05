@@ -89,7 +89,7 @@ void setup() {
 }
 ```
 
-The `.init()` method returns -1 in case the sensor initialization fails, this can be used to catch any errors that may occur.
+The `.init()` method returns 0 on successful initialization or 1 in case the initialization fails, this can be used to catch any errors that may occur.
 This (default) initialization should work in most cases, but in case you need to change any of the sensors' settings, please refer to the [Library reference](#library-reference) on details of how to correctly initialize each of the supported sensors.
 
 After all the sensor have been succefully initialized, you can access their data by calling `.measure()` method.
@@ -134,7 +134,7 @@ void loop() {
     `address = KX022_1020_DEVICE_ADDRESS_L` Default value, the default I2C address.  
     `address = KX022_1020_DEVICE_ADDRESS_H` The sensor I2C adress in case the pin ADDR is set to HIGH.
     
-  * `int KX022_1020::init(uint8_t range, uint8_t rate)` The initialization function.
+  * `uint8_t KX022_1020::init(uint8_t range, uint8_t rate)` The initialization function.
   
     `range = KX022_1020_RANGE_4G` Default value, output is in range +-4g.  
     `range = KX022_1020_RANGE_2G` Output is in range +-2g.  
@@ -152,7 +152,7 @@ void loop() {
   
     `address = BM1383GLV_DEVICE_ADDRESS` Default value, the default I2C address.
     
-  * `int BM1383GLV::init(uint8_t mode, uint8_t avg, uint8_t tempAvg)` The initialization function.
+  * `uint8_t BM1383GLV::init(uint8_t mode, uint8_t avg, uint8_t tempAvg)` The initialization function.
   
     `mode = BM1383GLV_CONTINUOUS_200_MS` Default value, continuous measurement mode over 200 ms.  
     `mode = BM1383GLV_<mode_name>` Other possible measurement modes, see `/sensors/BM1383GLV.cpp` for details.  
@@ -171,7 +171,7 @@ void loop() {
     `intNum = INT_0` Default value, the connected Arduino interrupt is interrupt 0. Note that this is NOT the Arduino pin number!  
     `intNum = INT_1` The connected Arduino interrupt is interrupt 1. Note that this is NOT the Arduino pin number!
     
-  * `int BM1422GMV::init(void func(void), uint8_t mode, uint8_t rate, uint8_t output, uint8_t avg)` The initialization function.
+  * `uint8_t BM1422GMV::init(void func(void), uint8_t mode, uint8_t rate, uint8_t output, uint8_t avg)` The initialization function.
   
     `void func(void)` The interrupt service routine, see `/examples/BM1422GMV` and [Notes](#notes) for details on how to use interrupts.  
     `mode = BM1422GMV_MODE_SINGLE` Default value, single measurement mode.  
@@ -193,7 +193,7 @@ void loop() {
   
     `address = RPR_0521RS_DEVICE_ADDRESS` Default value, the default I2C address.
     
-  * `int RPR_0521RS::init(uint8_t measurementTime, uint8_t ledCurrent)` The initialization function.
+  * `uint8_t RPR_0521RS::init(uint8_t measurementTime, uint8_t ledCurrent)` The initialization function.
   
     `measurementTime = RPR_0521RS_MEAS_TIME_100_MS_100_MS` Default value, ambient light sensor (ALS) measurement time is 100 ms, proximity sensor (PS) measurement time is 100 ms.  
     `measurementTime = RPR_0521RS_MEAS_TIME_<als_time>_<ps_time>` Other possible measurement time values, see `/sensors/RPR_0521RS.cpp` for details.  
@@ -213,7 +213,7 @@ void loop() {
     `address = BH1745NUC_DEVICE_ADDRESS_H` Default value, the default I2C address.  
     `address = BM1422GMV_DEVICE_ADDRESS_L` The sensor I2C adress in case the pin ADDR is set to LOW.
     
-  * `int BH1745NUC::init(uint8_t measurementTime)` The initialization function.
+  * `uint8_t BH1745NUC::init(uint8_t measurementTime)` The initialization function.
   
     `measurementTime = BH1745NUC_MEAS_TIME_160_MS` Default value, measurement time is 160 ms.  
     `measurementTime = BM1422GMV_MEAS_TIME_<n>_MS` Other possible measurement times in ms, see `/sensors/BH1745NUC.cpp` for details.
@@ -226,7 +226,7 @@ void loop() {
 * BD7411G
   * `BD7411G::BD7411G(void)` The default constructor.
   
-  * `int BD7411G::init(uint8_t pin = 0)` The initialization function.
+  * `uint8_t BD7411G::init(uint8_t pin = 0)` The initialization function.
   
     `pin = 0` Default value, this is the Arduino digital pin the GPIO header on the shield is connected to (D0).
     
@@ -237,7 +237,7 @@ void loop() {
 * BD1020HFV
   * `BD1020HFV::BD1020HFV(void)` The default constructor.
   
-  * `int BD1020HFV::init(uint8_t position = ANALOG_1)` The initialization function.
+  * `uint8_t BD1020HFV::init(uint8_t position = ANALOG_1)` The initialization function.
   
     `position = ANALOG_1` Default value, in case the sensor is connected to ANALOG_1 pin header on the shield.  
     `position = ANALOG_2` In case the sensor is connected to ANALOG_2 pin header on the shield.
@@ -249,7 +249,7 @@ void loop() {
 * ML8511A
   * `ML8511A::ML8511A(void)` The default constructor.
   
-  * `int ML8511A::init(uint8_t position)` The initialization function.
+  * `uint8_t ML8511A::init(uint8_t position)` The initialization function.
   
     `position = ANALOG_1` Default value, in case the sensor is connected to ANALOG_1 pin header on the shield.  
     `position = ANALOG_2` In case the sensor is connected to ANALOG_2 pin header on the shield.
@@ -263,7 +263,7 @@ void loop() {
   
     `address = BH1790GLC_DEVICE_ADDRESS` Default value, the default I2C address.
   
-  * `int BH1790GLC::init(uint8_t readCycle, uint8_t ledCurrent)` The initialization function.
+  * `uint8_t BH1790GLC::init(uint8_t readCycle, uint8_t ledCurrent)` The initialization function.
   
     `readCycle = BH1790GLC_RCYCLE_32_HZ` Default value, this is the maximum frequency at which you can access the data (32 Hz).  
     `readCycle = BH1790GLC_RCYCLE_64_HZ` 64 Hz data access frequency. See [Notes](#notes) for details.  
