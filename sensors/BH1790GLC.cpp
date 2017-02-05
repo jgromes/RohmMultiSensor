@@ -50,9 +50,9 @@ class BH1790GLC {
       _address = address;
     }
     
-    int init(uint8_t readCycle = BH1790GLC_RCYCLE_32_HZ, uint8_t ledCurrent = BH1790GLC_LED_CURRENT_6_MA) {
+    uint8_t init(uint8_t readCycle = BH1790GLC_RCYCLE_32_HZ, uint8_t ledCurrent = BH1790GLC_LED_CURRENT_6_MA) {
       if((_utils.getRegValue(_address, BH1790GLC_REG_MANUFACTURER_ID) != BH1790GLC_MANUFACTURER_ID) || (_utils.getRegValue(_address, BH1790GLC_REG_PART_ID) != BH1790GLC_PART_ID)) {
-        return(-1);
+        return(1);
       }
       _utils.setRegValue(_address, BH1790GLC_REG_MEAS_CONTROL_1, BH1790GLC_READY | BH1790GLC_LED_LIGHTING_FREQ_128_HZ | readCycle);
       _utils.setRegValue(_address, BH1790GLC_REG_MEAS_CONTROL_2, BH1790GLC_LED_MODE_PULSE_PULSE | BH1790GLC_LED_ON_TIME_0_3_MS | ledCurrent);
