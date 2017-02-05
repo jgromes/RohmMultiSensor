@@ -53,9 +53,9 @@ class BH1745NUC {
       _address = address;
     }
     
-    int init(uint8_t measurementTime = BH1745NUC_MEAS_TIME_160_MS) {
+    uint8_t init(uint8_t measurementTime = BH1745NUC_MEAS_TIME_160_MS) {
       if((_utils.getRegValue(_address, BH1745NUC_REG_SYSTEM_CONTROL, 5, 0) != BH1745NUC_PART_ID) || (_utils.getRegValue(_address, BH1745NUC_REG_MANUFACTURER_ID) != BH1745NUC_MANUFACTURER_ID)) {
-        return(-1);
+        return(1);
       }
       
       _utils.setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_1, measurementTime, 2, 0);
