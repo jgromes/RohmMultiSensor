@@ -8,8 +8,9 @@ class ML8511A {
   public:
     ML8511A(void) {}
     
-    int init(uint8_t pin = ANALOG_1) {
+    uint8_t init(uint8_t pin = ANALOG_1) {
       _pin = pin;
+      return(0);
     }
     
     float measure(void) {
