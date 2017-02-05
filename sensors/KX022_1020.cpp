@@ -102,9 +102,9 @@ class KX022_1020 {
       _address = address;
     }
     
-    int init(uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
+    uint8_t init(uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
       if(_utils.getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
-        return(-1);
+        return(1);
       }
       _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY | KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_OFF | range | KX022_1020_TAP_DETECT_ON | KX022_1020_WAKE_UP_ON | KX022_1020_TILT_POSITION_ON);
       _utils.setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
