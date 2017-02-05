@@ -49,9 +49,9 @@ class BM1383GLV {
       _address = address;
     }
     
-    int init(uint8_t mode = BM1383GLV_CONTINUOUS_200_MS, uint8_t avg = BM1383GLV_AVERAGE_64, uint8_t tempAvg = BM1383GLV_LESS_TEMP_ON) {
+    uint8_t init(uint8_t mode = BM1383GLV_CONTINUOUS_200_MS, uint8_t avg = BM1383GLV_AVERAGE_64, uint8_t tempAvg = BM1383GLV_LESS_TEMP_ON) {
       if(_utils.getRegValue(_address, BM1383GLV_REG_ID) != BM1383GLV_ID) {
-        return(-1);
+        return(1);
       }
       _utils.setRegValue(_address, BM1383GLV_REG_POWER_DOWN, BM1383GLV_ACTIVE, 0, 0);
       _utils.setRegValue(_address, BM1383GLV_REG_RESET, BM1383GLV_RSTB_ACTIVE, 0, 0);
