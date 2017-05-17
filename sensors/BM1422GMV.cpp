@@ -56,9 +56,9 @@
 #define BM1422GMV_RESET_RELEASE                         0b00000000 // 5     5     reset logic:  reset release
 #define BM1422GMV_RESET                                 0b00100000 // 5     5                   reset
 #define BM1422GMV_OUTPUT_RATE_10_HZ                     0b00000000 // 4     3     data output rate: 10 Hz
-#define BM1422GMV_OUTPUT_RATE_20_HZ                     0b00000000 // 4     3                       20 Hz
-#define BM1422GMV_OUTPUT_RATE_100_HZ                    0b00000000 // 4     3                       100 Hz
-#define BM1422GMV_OUTPUT_RATE_1_KHZ                     0b00000000 // 4     3                       1 kHz
+#define BM1422GMV_OUTPUT_RATE_20_HZ                     0b00001000 // 4     3                       20 Hz
+#define BM1422GMV_OUTPUT_RATE_100_HZ                    0b00010000 // 4     3                       100 Hz
+#define BM1422GMV_OUTPUT_RATE_1_KHZ                     0b00011000 // 4     3                       1 kHz
 #define BM1422GMV_MODE_CONTINUOUS                       0b00000000 // 1     1     continuous measurement mode
 #define BM1422GMV_MODE_SINGLE                           0b00000010 // 1     1     single measurement mode
 //BM1422GMV_REG_CNTL_2
@@ -82,25 +82,30 @@ class BM1422GMV {
       _address = address;
     }
     
-    uint8_t init(void func(void), uint8_t mode = BM1422GMV_MODE_SINGLE, uint8_t rate = BM1422GMV_OUTPUT_RATE_10_HZ, uint8_t output = BM1422GMV_OUTPUT_14_BIT, uint8_t avg = BM1422GMV_AVERAGE_4) {
+    uint8_t init(void func(void), uint8_t mode = BM1422GMV_MODE_SINGLE, uint8_t rate = BM1422GMV_OUTPUT_RATE_20_HZ, uint8_t output = BM1422GMV_OUTPUT_14_BIT, uint8_t avg = BM1422GMV_AVERAGE_4) {
       if(_utils.getRegValue(_address, BM1422GMV_REG_WHO_AM_I) != BM1422GMV_WHO_AM_I) {
         return(1);
       }
       
       _flagDrdy = 0;
+      attachInterrupt(_intNum, func, RISING);
       
       if(output == BM1422GMV_OUTPUT_14_BIT) {
         _outputSens = 24;
       } else if(output == BM1422GMV_OUTPUT_12_BIT) {
         _outputSens = 6;
       }
-      _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_MSB, 0x00);
-      _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_LSB, 0x00);
-      _utils.setRegValue(_address, BM1422GMV_REG_CNTL_1, BM1422GMV_ACTIVE | output | mode);
-      _utils.setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_LOW, 3, 2);
-      _utils.setRegValue(_address, BM1422GMV_REG_AVE_A, BM1422GMV_AVERAGE_4, 4, 2);
       
-      attachInterrupt(_intNum, func, FALLING);
+      if(mode == BM1422GMV_MODE_SINGLE) {
+        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_1, BM1422GMV_ACTIVE | output | mode);
+        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_MSB, 0x00);
+        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_LSB, 0x00);
+        
+        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_LOW, 3, 2);
+        _utils.setRegValue(_address, BM1422GMV_REG_AVE_A, BM1422GMV_AVERAGE_4, 4, 2);
+      } else if(mode == BM1422GMV_MODE_CONTINUOUS) {
+        //TODO: implement continuous mode
+      }
       
       return(0);
     }
@@ -109,12 +114,8 @@ class BM1422GMV {
       float* value = new float[3];
       
       _utils.setRegValue(_address, BM1422GMV_REG_CNTL_3, BM1422GMV_FORCE_MEASUREMENT, 6, 6);
-      while(_flagDrdy == 0) {
-        delayMicroseconds(200);
-        digitalWrite(12, HIGH); //no idea why this works, seems like it has to do something here, otherwise the interrupt never arrives
-      }
-      _flagDrdy = 0;
-      
+      while(!_flagDrdy);
+      _flagDrdy = false;
       
       value[0] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
       value[1] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
@@ -123,13 +124,14 @@ class BM1422GMV {
       return(value);
     }
     
-    void setFlagDrdy(void) {
-      _flagDrdy = 1;
+    volatile void setFlagDrdy(void) {
+      _flagDrdy = true;
     }
     
   private:
     utilities _utils;
-    uint8_t _address, _intNum, _outputSens, _flagDrdy;
+    uint8_t _address, _intNum, _outputSens;
+    volatile bool _flagDrdy = false;
 };
 
 #endif
