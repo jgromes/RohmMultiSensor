@@ -50,14 +50,6 @@ class utilities {
       return inBytes;
     }
     
-    //Function for writing to several consecutive registers
-    void writeRegisterBurst(uint8_t deviceAddress, uint8_t reg, uint8_t data, uint8_t len) {
-      Wire.beginTransmission(deviceAddress);
-      Wire.write(reg);
-      Wire.write(data, len);
-      Wire.endTransmission(true);
-    }
-    
     //Function for reading from a single register
     //this is a low-level function, use getRegValue instead!
     uint8_t readRegister(uint8_t deviceAddress, uint8_t reg) {
