@@ -49,15 +49,20 @@
 
 class BH1745NUC {
   public:
+    //Default constructor
     BH1745NUC(uint8_t address = BH1745NUC_DEVICE_ADDRESS_H) {
       _address = address;
     }
     
+    //Initialization function
     uint8_t init(uint8_t measurementTime = BH1745NUC_MEAS_TIME_160_MS) {
+      //check manufacturer and part ID
       if((_utils.getRegValue(_address, BH1745NUC_REG_SYSTEM_CONTROL, 5, 0) != BH1745NUC_PART_ID) || (_utils.getRegValue(_address, BH1745NUC_REG_MANUFACTURER_ID) != BH1745NUC_MANUFACTURER_ID)) {
+        //if the IDs do not match cancel initialization
         return(1);
       }
       
+      //set control registers according to datasheet and user settings
       _utils.setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_1, measurementTime, 2, 0);
       _utils.setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_2, BH1745NUC_RGBC_ON | BH1745NUC_ADC_GAIN_16, 4, 0);
       _utils.setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_3, BH1745NUC_MODE_CONTROL_3);;
@@ -65,9 +70,13 @@ class BH1745NUC {
       return(0);
     }
     
+    //Measurement function
     uint16_t* measure(void) {
       uint16_t* value = new uint16_t[4];
       
+      //TODO: implement interrupt
+      
+      //read measured RGBC value
       value[0] = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_LSB);
       value[1] = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_LSB);
       value[2] = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_LSB);
@@ -75,6 +84,7 @@ class BH1745NUC {
       
       return(value);
     }
+  
   private:
     utilities _utils;
     uint8_t _address;

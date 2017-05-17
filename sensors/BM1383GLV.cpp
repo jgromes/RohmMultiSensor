@@ -45,27 +45,43 @@
 
 class BM1383GLV {
   public:
+    //Default constructor
     BM1383GLV(uint8_t address = BM1383GLV_DEVICE_ADDRESS) {
       _address = address;
     }
     
+    //Initialization function
     uint8_t init(uint8_t mode = BM1383GLV_CONTINUOUS_200_MS, uint8_t avg = BM1383GLV_AVERAGE_64, uint8_t tempAvg = BM1383GLV_LESS_TEMP_ON) {
+      //check manufacturer ID
       if(_utils.getRegValue(_address, BM1383GLV_REG_ID) != BM1383GLV_ID) {
+        //if the manufacturer ID does not match cancel initialization
         return(1);
       }
+      
+      //set control registers according to datasheet and user settings
       _utils.setRegValue(_address, BM1383GLV_REG_POWER_DOWN, BM1383GLV_ACTIVE, 0, 0);
       _utils.setRegValue(_address, BM1383GLV_REG_RESET, BM1383GLV_RSTB_ACTIVE, 0, 0);
       _utils.setRegValue(_address, BM1383GLV_REG_MODE_CONTROL, avg | tempAvg | mode);
+      
       return(0);
     }
     
+    //Measurement function
     float measure(void) {
       uint32_t rawValue;
       float value;
+      
+      //TODO: implement interrupt
+      
+      //read the raw 4-byte value
       rawValue = (((uint32_t)_utils.getRegValue(_address, BM1383GLV_REG_PRESSURE_MSB) << 16) | ((uint32_t)_utils.getRegValue(_address, BM1383GLV_REG_PRESSURE_MID) << 8) | _utils.getRegValue(_address, BM1383GLV_REG_PRESSURE_LSB, 7, 2)) >> 2;
+      
+      //calcute real pressure in hPa
       value = rawValue / 2048.0;
+      
       return(value);
     }
+  
   private:
     utilities _utils;
     uint8_t _address;

@@ -77,19 +77,25 @@
 
 class BM1422GMV {
   public:
+    //Default constructor
     BM1422GMV(uint8_t intNum = INT_0, uint8_t address = BM1422GMV_DEVICE_ADDRESS_L) {
       _intNum = intNum;
       _address = address;
     }
     
+    //Initialization function
     uint8_t init(void func(void), uint8_t mode = BM1422GMV_MODE_SINGLE, uint8_t rate = BM1422GMV_OUTPUT_RATE_20_HZ, uint8_t output = BM1422GMV_OUTPUT_14_BIT, uint8_t avg = BM1422GMV_AVERAGE_4) {
+      //check manufacturer ID
       if(_utils.getRegValue(_address, BM1422GMV_REG_WHO_AM_I) != BM1422GMV_WHO_AM_I) {
+        //if the manufacturer ID does not match cancel initialization
         return(1);
       }
       
-      _flagDrdy = 0;
+      //interrupt setup
       attachInterrupt(_intNum, func, RISING);
+      _flagDrdy = false;
       
+      //set output sensitivity
       if(output == BM1422GMV_OUTPUT_14_BIT) {
         _outputSens = 24;
       } else if(output == BM1422GMV_OUTPUT_12_BIT) {
@@ -97,10 +103,11 @@ class BM1422GMV {
       }
       
       if(mode == BM1422GMV_MODE_SINGLE) {
+        //single mode: the measurements will be only taken when the measurement function is called, rate is ignored
+        //set control registers according to datasheet and user settings
         _utils.setRegValue(_address, BM1422GMV_REG_CNTL_1, BM1422GMV_ACTIVE | output | mode);
         _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_MSB, 0x00);
         _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_LSB, 0x00);
-        
         _utils.setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_LOW, 3, 2);
         _utils.setRegValue(_address, BM1422GMV_REG_AVE_A, BM1422GMV_AVERAGE_4, 4, 2);
       } else if(mode == BM1422GMV_MODE_CONTINUOUS) {
@@ -110,13 +117,18 @@ class BM1422GMV {
       return(0);
     }
     
+    //Measurement function
     float* measure(void) {
       float* value = new float[3];
       
+      //start new measurement
       _utils.setRegValue(_address, BM1422GMV_REG_CNTL_3, BM1422GMV_FORCE_MEASUREMENT, 6, 6);
+      
+      //wait for DRDY interrupt
       while(!_flagDrdy);
       _flagDrdy = false;
       
+      //read measured values and calculate magnetic induction in uT
       value[0] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
       value[1] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
       value[2] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_LSB)) / _outputSens;
@@ -124,6 +136,7 @@ class BM1422GMV {
       return(value);
     }
     
+    //Function to be called inside ISR, this will set data ready flag
     volatile void setFlagDrdy(void) {
       _flagDrdy = true;
     }

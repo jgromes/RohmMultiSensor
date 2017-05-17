@@ -60,6 +60,8 @@
 #define KX022_1020_DEVICE_ADDRESS_L                   0x1E
 #define KX022_1020_DEVICE_ADDRESS_H                   0x1F
 #define KX022_1020_WHO_AM_I                           0x14
+#define INT_0                                         0x00
+#define INT_1                                         0x01
 
 //KX022-1020 settings
 //KX022_1020_REG_CNTL1                                                MSB   LSB   DESCRIPTION
@@ -98,18 +100,25 @@
 
 class KX022_1020 {
   public:
+    //Default constructor
     KX022_1020(uint8_t address = KX022_1020_DEVICE_ADDRESS_L) {
       _address = address;
     }
     
+    //Initialization function
     uint8_t init(uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
+      //check manufacturer ID
       if(_utils.getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
+        //if the manufacturer ID does not match cancel initialization
         return(1);
       }
+      
+      //set control registers according to datasheet and user settings
       _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY | KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_OFF | range | KX022_1020_TAP_DETECT_ON | KX022_1020_WAKE_UP_ON | KX022_1020_TILT_POSITION_ON);
       _utils.setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
       _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
-      //delay(1920);
+      
+      //set sensitivity according to user settings
       switch(range) {
         case KX022_1020_RANGE_2G: { _accelSensitivity = 16384;
                                   } break;
@@ -121,16 +130,23 @@ class KX022_1020 {
       return(0);
     }
     
+    //Measurement function
     float* measure(void) {
       float* value = new float[3];
+      
+      //TODO: implement interrupt
+      
+      //read the measured value as 2-byte integer and calculate the real acceleration in g force
       value[0] = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
       value[1] = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
       value[2] = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
+      
       return(value);
     }
+  
   private:
     utilities _utils;
-    uint8_t _address;
+    uint8_t _address, _flagDrdy;
     int _accelSensitivity = 8192;
 };
 

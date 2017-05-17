@@ -75,23 +75,32 @@
 
 class RPR_0521RS {
   public:
+    //Default constructor
     RPR_0521RS(uint8_t address = RPR_0521RS_DEVICE_ADDRESS) {
       _address = address;
     }
     
+    //Initialization function
     uint8_t init(uint8_t measurementTime = RPR_0521RS_MEAS_TIME_100_MS_100_MS, uint8_t ledCurrent = RPR_0521RS_LED_CURRENT_100_MA) {
+      //check manufacturer and part ID
       if((_utils.getRegValue(_address, RPR_0521RS_REG_SYSTEM_CONTROL, 5, 0) != RPR_0521RS_PART_ID) || (_utils.getRegValue(_address, RPR_0521RS_REG_MANUFACT_ID) != RPR_0521RS_MANUFACT_ID)) {
+        //if the IDs do not match cancel initialization
         return(1);
       }
+      
+      //set control registers according to datasheet and user settings
       _utils.setRegValue(_address, RPR_0521RS_REG_ALS_PS_CONTROL, RPR_0521RS_ALS_DATA0_GAIN_1 | RPR_0521RS_ALS_DATA1_GAIN_1 | ledCurrent);
       _utils.setRegValue(_address, RPR_0521RS_REG_PS_CONTROL, RPR_0521RS_PS_GAIN_1, 5, 4);
       _utils.setRegValue(_address, RPR_0521RS_REG_MODE_CONTROL, RPR_0521RS_ALS_ON | RPR_0521RS_PS_ON | measurementTime);
       
+      //TODO: implement gain and measurement time selection 
+      //gain and measurement time arrays
       uint8_t alsGainTable[4] = {1, 2, 64, 128};
-      uint16_t psGainTable[3] = {1, 2, 4};
-      uint16_t alsMeasureTimeTable[13] = {0, 0, 0, 0, 0, 100, 100, 100, 400, 400, 400, 400, 50};
-      uint16_t psMeasureTimeTable[13] = {0, 10, 40, 100, 400, 50, 100, 400, 50, 100, 0, 400, 50};
+      uint8_t psGainTable[3] = {1, 2, 4};
+      uint8_t alsMeasureTimeTable[13] = {0, 0, 0, 0, 0, 100, 100, 100, 400, 400, 400, 400, 50};
+      uint8_t psMeasureTimeTable[13] = {0, 10, 40, 100, 400, 50, 100, 400, 50, 100, 0, 400, 50};
       
+      //set gain and measurement time
       _alsData0Gain = alsGainTable[0];
       _alsData1Gain = alsGainTable[0];
       _alsMeasurementTime = alsMeasureTimeTable[measurementTime];
@@ -99,23 +108,30 @@ class RPR_0521RS {
       return(0);
     }
     
+    //Measurement function
     float measure(uint8_t type = ALS) {
+      //TODO: implement interrupt
       if(type == ALS) {
+        //ambient light measurement
         uint16_t rawValue[2];
         float data0, data1, data1_0;
         
+        //read raw 2-byte integer values
         rawValue[0] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_LSB);
         rawValue[1] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_LSB);
         
+        //intermediate calculations
         data0 = (float)rawValue[0] * (100 / _alsMeasurementTime) / _alsData0Gain;
         data1 = (float)rawValue[1] * (100 / _alsMeasurementTime) / _alsData1Gain;
         
+        //zero division check
         if(data0 == 0) {
           return(0);
         }
         
         data1_0 = data1 / data0;
         
+        //return real value in lx
         if (data1_0 < 0.595) {
           return(1.682 * data0 - 1.877 * data1);
         } else if (data1_0 < 1.015) {
@@ -126,12 +142,17 @@ class RPR_0521RS {
           return(0.766 * data0 - 0.25 * data1);
         }
       } else if(type == PS) {
+        //proximity measurement
         float value;
+        
+        //read the proximity value (does not have a real unit, this will only tell you whether an object is closer tha e.g. a few centimiters)
         value = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_LSB);
+        
         return(value);
       }
       return(0);
     }
+  
   private:
     utilities _utils;
     uint8_t _address, _alsData0Gain, _alsData1Gain, _alsMeasurementTime;

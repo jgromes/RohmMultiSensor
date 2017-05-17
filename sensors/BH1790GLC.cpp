@@ -46,33 +46,45 @@
 
 class BH1790GLC {
   public:
+    //Default constructor
     BH1790GLC(uint8_t address = BH1790GLC_DEVICE_ADDRESS) {
       _address = address;
     }
     
+    //Initialization function
     uint8_t init(uint8_t readCycle = BH1790GLC_RCYCLE_32_HZ, uint8_t ledCurrent = BH1790GLC_LED_CURRENT_6_MA) {
+      //check manufacturer and part ID
       if((_utils.getRegValue(_address, BH1790GLC_REG_MANUFACTURER_ID) != BH1790GLC_MANUFACTURER_ID) || (_utils.getRegValue(_address, BH1790GLC_REG_PART_ID) != BH1790GLC_PART_ID)) {
+        //if the IDs do not match cancel initialization
         return(1);
       }
+      
+      //set control registers according to datasheet and user settings
       _utils.setRegValue(_address, BH1790GLC_REG_MEAS_CONTROL_1, BH1790GLC_READY | BH1790GLC_LED_LIGHTING_FREQ_128_HZ | readCycle);
       _utils.setRegValue(_address, BH1790GLC_REG_MEAS_CONTROL_2, BH1790GLC_LED_MODE_PULSE_PULSE | BH1790GLC_LED_ON_TIME_0_3_MS | ledCurrent);
       _utils.setRegValue(_address, BH1790GLC_REG_MEAS_START, BH1790GLC_START, 0, 0);
+      
       return(0);
     }
     
+    //Measurement function
     int* measure(void) {
       int* value = new int[2];
       uint8_t rawValue[4];
+      
+      //read the single byte led on/off data
       rawValue[0] = _utils.getRegValue(_address, BH1790GLC_REG_DATAOUT_LEDOFF_LSB);
       rawValue[1] = _utils.getRegValue(_address, BH1790GLC_REG_DATAOUT_LEDOFF_MSB);
       rawValue[2] = _utils.getRegValue(_address, BH1790GLC_REG_DATAOUT_LEDON_LSB);
       rawValue[3] = _utils.getRegValue(_address, BH1790GLC_REG_DATAOUT_LEDON_MSB);
       
+      //convert raw data to 2-byte integer
       value[0] = ((int)rawValue[3] << 8) | rawValue[2];
       value[1] = ((int)rawValue[1] << 8) | rawValue[0];
       
       return(value);
     }
+  
   private:
     utilities _utils;
     uint8_t _address;
