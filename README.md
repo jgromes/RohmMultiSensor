@@ -47,7 +47,7 @@ For example, if you want to interface with KX022-1020 accelerometer and BM1383 p
 
 IMPORTANT: You will not be able to use any sensors for which you have not provided the `#define`! This is to ensure that only the required sensors are included, reducing overall program size.
 
-Alternatively, you can `#define` all the sensors that shaer the same supply voltage. In this example, we will include all sensors that run on 1.8 V:
+Alternatively, you can `#define` all the sensors that share the same supply voltage. In this example, we will include all sensors that run on 1.8 V:
 
 ```c++
 #define INCLUDE_ALL_1V8_SENSORS
@@ -69,8 +69,8 @@ KX022_1020 acc;
 BM1383 bar;
 ```
 
-After the instantization, in the Arduino `setup()` function, each sensor has to be initialized. This is done by calling `.init()` method for each of the sensors.
-Also, since some of the sensors use I2C (aka TWI) interface, be sure to add `Wire.begin()` BEFORE the `.init()` initialization!
+After the instantiation, in the Arduino `setup()` function, each sensor has to be initialized. This is done by calling `.init()` method for each of the sensors. Since KX022 uses interrupts, we will also define interrupt service routine (ISR).
+Also, because some of the sensors use I2C (aka TWI) interface, be sure to add `Wire.begin()` BEFORE the `.init()` initialization!
 
 ```c++
 #define INCLUDE_KX022_1020
@@ -81,10 +81,14 @@ Also, since some of the sensors use I2C (aka TWI) interface, be sure to add `Wir
 KX022_1020 acc;
 BM1383 bar;
 
+void isr(void) {
+  acc.setFlagDrdy();
+}
+
 void setup() {
   Wire.begin();
   
-  acc.init();
+  acc.init(isr);
   bar.init();
 }
 ```
@@ -104,11 +108,17 @@ Please note that the return data types vary for each of the sensors, for details
 KX022_1020 acc;
 BM1383 bar;
 
+void isr(void) {
+  acc.setFlagDrdy();
+}
+
 void setup() {
   Serial.begin(9600);
+  Serial.println();
+  
   Wire.begin();
   
-  acc.init();
+  acc.init(isr);
   bar.init();
 }
 
@@ -129,13 +139,17 @@ void loop() {
 
 ## Library reference
 * KX022_1020
-  * `KX022_1020::KX022_1020(uint8_t address)` The default constructor.
+  * `KX022_1020::KX022_1020(uint8_t intNum, uint8_t address)` The default constructor.
 
     `address = KX022_1020_DEVICE_ADDRESS_L` Default value, the default I2C address.  
     `address = KX022_1020_DEVICE_ADDRESS_H` The sensor I2C adress in case the pin ADDR is set to HIGH.
+    `intNum = INT_0` Default value, the connected Arduino interrupt is interrupt 0. Note that this is NOT the Arduino pin number!  
+    `intNum = INT_1` The connected Arduino interrupt is interrupt 1. Note that this is NOT the Arduino pin number!
     
-  * `uint8_t KX022_1020::init(uint8_t range, uint8_t rate)` The initialization function.
-  
+  * `uint8_t KX022_1020::init(void func(void), uint8_t range, uint8_t rate)` The initialization function.
+    
+    `void func(void)` The interrupt service routine, see `/examples/KX022_1020` and [Notes](#notes) for details on how to use interrupts.
+    
     `range = KX022_1020_RANGE_4G` Default value, output is in range +-4g.  
     `range = KX022_1020_RANGE_2G` Output is in range +-2g.  
     `range = KX022_1020_RANGE_8G` Output is in range +-8g.  
@@ -286,6 +300,8 @@ void loop() {
   * INTRx pins on J3 and J4 are used to connect CMOS output interrupts for sensors KX022_1020 and BM1422GMV on header I2C_x  
   * INTx pins on J3 and J4 are used to connect interrupts which require external pull-up, these are for sensors BH1745NUC and RPR-0521RS on header I2C_x  
   * J16 jumper is ON/OFF switch for the pull-up, when shorted, it will be ON: the pull-up resistor is 1kΩ, the logic HIGH will be 5V.
+  
+  Currently, interrupts are implemented in BM1422GMV magnetometer and KX022-1020 accelerometer.
   
   Example: If we want to use the BM1422GMV magnetometer, we can connect it to the header I2C_1. Since BM1422GMV doesn't need an external pull-up, we can directly short INTR1 on J3 if we want to use Arduino interrupt 0 (default setting), or INTR1 on J4 if we want to use Arduino interrupt 1. See `/examples/BM1422GMV` for details.
 
