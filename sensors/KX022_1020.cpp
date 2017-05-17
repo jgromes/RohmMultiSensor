@@ -23,33 +23,33 @@
 #define KX022_1020_REG_INS3                           0x14
 #define KX022_1020_REG_STAT                           0x15
 #define KX022_1020_REG_INT_REL                        0x17
-#define KX022_1020_REG_CNTL1                          0x18  //*
-#define KX022_1020_REG_CNTL2                          0x19  //*
-#define KX022_1020_REG_CNTL3                          0x1A  //*
-#define KX022_1020_REG_ODCNTL                         0x1B  //*
-#define KX022_1020_REG_INC1                           0x1C  //*
-#define KX022_1020_REG_INC2                           0x1D  //*
-#define KX022_1020_REG_INC3                           0x1E  //*
-#define KX022_1020_REG_INC4                           0x1F  //*
-#define KX022_1020_REG_INC5                           0x20  //*
-#define KX022_1020_REG_INC6                           0x21  //*
-#define KX022_1020_REG_TILT_TIMER                     0x22  //*
-#define KX022_1020_REG_WUFC                           0x23  //*
-#define KX022_1020_REG_TDTRC                          0x24  //*
-#define KX022_1020_REG_TDTC                           0x25  //*
-#define KX022_1020_REG_TTH                            0x26  //*
-#define KX022_1020_REG_TTL                            0x27  //*
-#define KX022_1020_REG_FTD                            0x28  //*
-#define KX022_1020_REG_STD                            0x29  //*
-#define KX022_1020_REG_TLT                            0x2A  //*
-#define KX022_1020_REG_TWS                            0x2B  //*
-#define KX022_1020_REG_ATH                            0x30  //*
-#define KX022_1020_REG_TILT_ANGLE_LL                  0x32  //*
-#define KX022_1020_REG_TILT_ANGLE_HL                  0x33  //*
-#define KX022_1020_REG_HYST_SET                       0x34  //*
-#define KX022_1020_REG_LP_CNTL                        0x35  //*
-#define KX022_1020_REG_BUF_CNTL1                      0x3A  //*
-#define KX022_1020_REG_BUF_CNTL2                      0x3B  //*
+#define KX022_1020_REG_CNTL1                          0x18
+#define KX022_1020_REG_CNTL2                          0x19
+#define KX022_1020_REG_CNTL3                          0x1A
+#define KX022_1020_REG_ODCNTL                         0x1B
+#define KX022_1020_REG_INC1                           0x1C
+#define KX022_1020_REG_INC2                           0x1D
+#define KX022_1020_REG_INC3                           0x1E
+#define KX022_1020_REG_INC4                           0x1F
+#define KX022_1020_REG_INC5                           0x20
+#define KX022_1020_REG_INC6                           0x21
+#define KX022_1020_REG_TILT_TIMER                     0x22
+#define KX022_1020_REG_WUFC                           0x23
+#define KX022_1020_REG_TDTRC                          0x24
+#define KX022_1020_REG_TDTC                           0x25
+#define KX022_1020_REG_TTH                            0x26
+#define KX022_1020_REG_TTL                            0x27
+#define KX022_1020_REG_FTD                            0x28
+#define KX022_1020_REG_STD                            0x29
+#define KX022_1020_REG_TLT                            0x2A
+#define KX022_1020_REG_TWS                            0x2B
+#define KX022_1020_REG_ATH                            0x30
+#define KX022_1020_REG_TILT_ANGLE_LL                  0x32
+#define KX022_1020_REG_TILT_ANGLE_HL                  0x33
+#define KX022_1020_REG_HYST_SET                       0x34
+#define KX022_1020_REG_LP_CNTL                        0x35
+#define KX022_1020_REG_BUF_CNTL1                      0x3A
+#define KX022_1020_REG_BUF_CNTL2                      0x3B
 #define KX022_1020_REG_BUF_STATUS_1                   0x3C
 #define KX022_1020_REG_BUF_STATUS_2                   0x3D
 #define KX022_1020_REG_BUF_CLEAR                      0x3E
@@ -65,7 +65,7 @@
 
 //KX022-1020 settings
 //KX022_1020_REG_CNTL1                                                MSB   LSB   DESCRIPTION
-#define KX022_1020_STANDBY                            0b00000000  //  7     7     allows to change settings and write to above marked (*) registers
+#define KX022_1020_STANDBY                            0b00000000  //  7     7     allows to change settings
 #define KX022_1020_OPERATE                            0b10000000  //  7     7     start measuring; needs 1.2/KX022_1020_OUTPUT_RATE_n delay to load settings
 #define KX022_1020_LOW_POWER                          0b00000000  //  6     6     low current draw, lower resolution
 #define KX022_1020_HIGH_RESOLUTION                    0b01000000  //  6     6     high resolution, higher current draw
@@ -97,25 +97,65 @@
 #define KX022_1020_OUTPUT_RATE_1_563_HZ               0b00001001  //  3     0                       1.563 Hz
 #define KX022_1020_OUTPUT_RATE_3_125_HZ               0b00001010  //  3     0                       3.125 Hz
 #define KX022_1020_OUTPUT_RATE_6_25_HZ                0b00001011  //  3     0                       6.25 Hz
+//KX022_1020_REG_INC1
+#define KX022_1020_INT1_DISABLE                       0b00000000  //  5     5     INT output disabled
+#define KX022_1020_INT1_ENABLE                        0b00100000  //  5     5     INT output enabled
+#define KX022_1020_INT1_ACTIVE_LOW                    0b00000000  //  4     4     INT active low
+#define KX022_1020_INT1_ACTIVE_HIGH                   0b00010000  //  4     4     INT active high
+#define KX022_1020_INT1_LATCH_ON                      0b00000000  //  3     3     INT will latch until cleared by reading KX022_1020_REG_INT_REL
+#define KX022_1020_INT1_LATCH_OFF                     0b00001000  //  3     3     INT will output a single 50 us pulse
+//KX022_1020_REG_INC2
+#define KX022_1020_INT1_X_NEG_OFF                     0b00000000  //  5     5     negative X value will not trigger interrupt
+#define KX022_1020_INT1_X_NEG_ON                      0b00100000  //  5     5     negative X value will trigger interrupt
+#define KX022_1020_INT1_X_POS_OFF                     0b00000000  //  4     4     positive X value will not trigger interrupt
+#define KX022_1020_INT1_X_POS_ON                      0b00010000  //  4     4     positive X value will trigger interrupt
+#define KX022_1020_INT1_Y_NEG_OFF                     0b00000000  //  3     3     negative Y value will not trigger interrupt
+#define KX022_1020_INT1_Y_NEG_ON                      0b00001000  //  3     3     negative Y value will trigger interrupt
+#define KX022_1020_INT1_Y_POS_OFF                     0b00000000  //  2     2     positive Y value will not trigger interrupt
+#define KX022_1020_INT1_Y_POS_ON                      0b00000100  //  2     2     positive Y value will trigger interrupt
+#define KX022_1020_INT1_Z_NEG_OFF                     0b00000000  //  1     1     negative Z value will not trigger interrupt
+#define KX022_1020_INT1_Z_NEG_ON                      0b00000010  //  1     1     negative Z value will trigger interrupt
+#define KX022_1020_INT1_Z_POS_OFF                     0b00000000  //  0     0     positive Z value will not trigger interrupt
+#define KX022_1020_INT1_Z_POS_ON                      0b00000001  //  0     0     positive Z value will trigger interrupt
+//KX022_1020_REG_INC4
+#define KX022_1020_INT1_BUFFER_FULL_OFF               0b00000000  //  6     6     interrupt will not be triggered on full buffer
+#define KX022_1020_INT1_BUFFER_FULL_ON                0b01000000  //  6     6     interrupt will be triggered on full buffer
+#define KX022_1020_INT1_WATERMARK_OFF                 0b00000000  //  5     5     interrupt will not be triggered on watermark (filled FIFO)
+#define KX022_1020_INT1_WATERMARK_ON                  0b00100000  //  5     5     interrupt will be triggered on watermark (filled FIFO)
+#define KX022_1020_INT1_DATA_READY_OFF                0b00000000  //  4     4     interrupt will not be triggered when the measured data are ready
+#define KX022_1020_INT1_DATA_READY_ON                 0b00010000  //  4     4     interrupt will be triggered when the measured data are ready
+#define KX022_1020_INT1_TAP_OFF                       0b00000000  //  2     2     interrupt will not be triggered on tap/double tap detection
+#define KX022_1020_INT1_TAP_ON                        0b00000100  //  2     2     interrupt will be triggered on tap/double tap detection
+#define KX022_1020_INT1_MOTION_DETECT_OFF             0b00000000  //  1     1     interrupt will not be triggered on motion detection
+#define KX022_1020_INT1_MOTION_DETECT_ON              0b00000010  //  1     1     interrupt will be triggered on motion detection
+#define KX022_1020_INT1_TILT_OFF                      0b00000000  //  0     0     interrupt will not be triggered on tilt detection
+#define KX022_1020_INT1_TILT_ON                       0b00000001  //  0     0     interrupt will be triggered on tilt detection
 
 class KX022_1020 {
   public:
     //Default constructor
-    KX022_1020(uint8_t address = KX022_1020_DEVICE_ADDRESS_L) {
+    KX022_1020(uint8_t intNum = INT_0, uint8_t address = KX022_1020_DEVICE_ADDRESS_L) {
+      _intNum = intNum;
       _address = address;
     }
     
     //Initialization function
-    uint8_t init(uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
+    uint8_t init(void func(void), uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
       //check manufacturer ID
       if(_utils.getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
         //if the manufacturer ID does not match cancel initialization
         return(1);
       }
       
+      //interrupt setup
+      attachInterrupt(_intNum, func, RISING);
+      _flagDrdy = false;
+      
       //set control registers according to datasheet and user settings
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY | KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_OFF | range | KX022_1020_TAP_DETECT_ON | KX022_1020_WAKE_UP_ON | KX022_1020_TILT_POSITION_ON);
+      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY | KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_ON | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF);
       _utils.setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
+      _utils.setRegValue(_address, KX022_1020_REG_INC1, KX022_1020_INT1_ENABLE | KX022_1020_INT1_ACTIVE_HIGH | KX022_1020_INT1_LATCH_OFF, 5, 3);
+      _utils.setRegValue(_address, KX022_1020_REG_INC4, KX022_1020_INT1_DATA_READY_ON, 4, 4);
       _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
       
       //set sensitivity according to user settings
@@ -134,7 +174,9 @@ class KX022_1020 {
     float* measure(void) {
       float* value = new float[3];
       
-      //TODO: implement interrupt
+      //wait for DRDY interrupt
+      while(!_flagDrdy);
+      _flagDrdy = false;
       
       //read the measured value as 2-byte integer and calculate the real acceleration in g force
       value[0] = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
@@ -143,11 +185,19 @@ class KX022_1020 {
       
       return(value);
     }
+    
+    //TODO: implement interrupts for value, tilt, tap, etc.
+    
+    //Function to be called inside ISR, this will set data ready flag
+    volatile void setFlagDrdy(void) {
+      _flagDrdy = true;
+    }
   
   private:
     utilities _utils;
-    uint8_t _address, _flagDrdy;
-    int _accelSensitivity = 8192;
+    uint8_t _address, _intNum;
+    uint16_t _accelSensitivity = 8192;
+    volatile bool _flagDrdy = false;
 };
 
 #endif
