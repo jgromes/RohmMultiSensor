@@ -1,7 +1,7 @@
 /*
- * KX022_1020 example
+ * KX022-1020 example
  * 
- * This sketch shows you how to correctly setup iterrupts to use KX022-1020 accelerometer.
+ * This sketch shows you how to correctly measure acceleration using KX022-1020 accelerometer.
  * 
  * Before powering up your Arduino, make sure to select 1.8V or 3V on jumper J15 on the shield!
  * 
@@ -16,17 +16,21 @@
  *        Since KX022-1020 doesn't need an external pull-up, we can directly short INTR1 on J3 if we want to use Arduino interrupt 0 (default setting), or INTR1 on J4 if we want to use Arduino interrupt 1.
  */
 
-// define all the sensors we will use
+// define the sensor we will use
 #define INCLUDE_KX022_1020
 
 // include the library
 #include <RohmMultiSensor.h>
 
-// instantiate the sensor's class
+// instantiate the sensor's class with the default setting (sensor is using interrupt 0)
 KX022_1020 acc;
+// the above is equivalent to
+// KX022_1020 acc(INT_0);
+// if you want to use interrupt 1, use the following
+// KX022_1020 acc(INT_1);
 
 // define the interrupt service routine
-void isr(void) {
+void acc_isr(void) {
   acc.setFlagDrdy();
 }
 
@@ -41,7 +45,7 @@ void setup() {
 
   // initialize KX022-1020 with the default values
   // note that we have to provide the interrupt service routine to the .init() method
-  acc.init(isr);
+  acc.init(acc_isr);
 
   Serial.println("X[g]\tY[g]\tZ[g]");
 }

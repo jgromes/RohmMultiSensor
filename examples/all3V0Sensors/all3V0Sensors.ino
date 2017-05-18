@@ -2,6 +2,12 @@
  * All 3.0 V sensors example
  * 
  * This sketch shows you how to use all 3.0 V ROHM sensors simultaneously.
+ * These sensors are: KX022-1020 accelerometer
+ *                    BM1383GLV pressure sensor
+ *                    RPR-0521RS proximity/ambient light sensor
+ *                    BH1745NUC color sensor
+ *                    BD1020HFV temperature sensor
+ *                    ML8511A UV sensor
  * 
  * Before powering up your Arduino, make sure to select 3V on jumper J15 on the shield!
  */
@@ -17,8 +23,15 @@ KX022_1020 acc;
 BM1383GLV bar;
 RPR_0521RS als;
 BH1745NUC rgbc;
-BD1020HFV temp;
-ML8511A uv;
+// temperature sensor (BD1020HFV) is connected to ANALOG_1 header on the shield
+BD1020HFV temp(ANALOG_1);
+// temperature sensor (ML8511A) is connected to ANALOG_2 header on the shield
+ML8511A uv(ANALOG_2);
+
+// define the interrupt service routine for KX022-1020
+void acc_isr(void) {
+  acc.setFlagDrdy();
+}
 
 void setup() {
   // begin serial communication
@@ -29,17 +42,15 @@ void setup() {
   // this function has to be called before any calls to .init()!
   Wire.begin();
 
-  // initialize all the sensor with default values.
-  acc.init();
+  // initialize all the sensor with default settings
+  acc.init(acc_isr);
   bar.init();
   als.init();
   rgbc.init();
-  // temperature sensor (BD1020HFV) is connected to ANALOG_1 header on the shield
-  temp.init(ANALOG_1);
-  // temperature sensor (ML8511A) is connected to ANALOG_2 header on the shield
-  uv.init(ANALOG_2);
+  temp.init();
+  uv.init();
 
-  Serial.println("X[g]\tY[g]\tZ[g]\tp[hPa]\tPS[cnt]\tALS[lx]\tR[-]\tG[-]\tB[-]\tC[-]\tt[deg C]\tUV[mW/cm^2]");
+  Serial.println("X[g]\tY[g]\tZ[g]\tp[hPa]\tPS[cnt]\tALS[lx]\tR[-]\tG[-]\tB[-]\tC[-]\tt[dg C]\tUV[mW/cm^2]");
 }
 
 void loop() {

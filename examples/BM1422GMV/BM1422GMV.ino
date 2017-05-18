@@ -1,7 +1,7 @@
 /*
  * BM1422GMV example
  * 
- * This sketch shows you how to correctly setup iterrupts to use BM1422GMV magnetometer.
+ * This sketch shows you how to correctly measure magnetic induction using BM1422GMV magnetometer.
  * 
  * Before powering up your Arduino, make sure to select 1.8V on jumper J15 on the shield!
  * 
@@ -22,11 +22,15 @@
 // include the library
 #include <RohmMultiSensor.h>
 
-// instantiate the sensor's class
+// instantiate the sensor's class with the default setting (sensor is using interrupt 0)
 BM1422GMV mag;
+// the above is equivalent to
+// BM1422GMV mag(INT_0);
+// if you want to use interrupt 1, use the following
+// BM1422GMV mag(INT_1);
 
 // define the interrupt service routine
-void isr(void) {
+void mag_isr(void) {
   mag.setFlagDrdy();
 }
 
@@ -40,9 +44,9 @@ void setup() {
   // this function has to be called before any calls to .init()!
   Wire.begin();
 
-  // initialize BM1422GMV with the default values
+  // initialize the sensor with default settings
   // note that we have to provide the interrupt service routine to the .init() method
-  mag.init(isr);
+  mag.init(mag_isr);
 
   Serial.println("X[uT]\tY[uT]\tZ[uT]");
 }

@@ -1,9 +1,11 @@
 /*
  * BH1790GLC example
  * 
- * This sketch shows you how to use the BM1790GLC sensor for basic hearbeat reading (use Serial Plotter to display the result)
+ * This sketch shows you how to use the BM1790GLC sensor for basic heartbeat reading (use Serial Plotter to display the result)
+ * Place your finger on the sensor to visualize your heartbeat.
  * 
- * Before powering up your Arduino, make sure to select 3V on jumper J15 on the shield! Also, connect the red VLED cable to 5V pin.
+ * Before powering up your Arduino, make sure to select 3V on jumper J15 on the shield!
+ * Also, connect the red VLED cable to 5V pin.
  * 
  * NOTE: Make sure that you are not trying to read the data faster than the readCycle frequency.
  *       For example, if you leave the default value, you have to wait at least 1/32 seconds before accessing the sensor again.
@@ -20,14 +22,14 @@ BH1790GLC pulse;
 
 void setup() {
   // begin serial communication
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println();
 
   // begin the TWI (I2C) interface.
   // this function has to be called before any calls to .init()!
   Wire.begin();
 
-  // initialize BH1790GLC with the default values
+  // initialize the sensor with default settings
   pulse.init();
 }
 

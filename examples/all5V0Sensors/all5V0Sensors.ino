@@ -2,6 +2,8 @@
  * All 5.0 V sensors example
  * 
  * This sketch shows you how to use all 5.0 V ROHM sensors simultaneously.
+ * These sensors are: BD7411G Hall sensor
+ *                    BD1020HFV temperature sensor
  * 
  * Before powering up your Arduino, make sure to select 5V on jumper J15 on the shield!
  * 
@@ -21,18 +23,18 @@ BD1020HFV temp;
 
 void setup() {
   // begin serial communication
-  Serial.begin(9600); 
+  Serial.begin(9600);
+  Serial.println();
 
   // begin the TWI (I2C) interface.
   // this function has to be called before any calls to .init()!
   Wire.begin();
 
-  // initialize all the sensor with default values.
+  // initialize all the sensor with default settings
   hall.init();
-  // temperature sensor (BD1020HFV) is connected to ANALOG_1 header on the shield
-  temp.init(ANALOG_1);
+  temp.init();
 
-  Serial.println("MF[-]\tt[deg C]");
+  Serial.println("MF[-]\tt[dg C]");
 }
 
 void loop() {

@@ -1,23 +1,23 @@
 /*
- * ML8511A example
+ * BD1020HFV example
  * 
- * This sketch shows you how to correctly measure UV radiation using ML8511A
+ * This sketch shows you how to correctly measure temperature using BD1020HFV
  * 
- * Before powering up your Arduino, make sure to select 3V on jumper J15 on the shield!
+ * Before powering up your Arduino, make sure to select 3V or 5V on jumper J15 on the shield!
  */
 
 // define the sensor we will use
-#define INCLUDE_ML8511A
+#define INCLUDE_BD1020HFV
 
 // include the library
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class with the default setting (sensor connected to ANALOG_1)
-ML8511A uv(ANALOG_2);
+BD1020HFV temp;
 // the above is equivalent to
-// ML8511A uv(ANALOG_1);
+// BD1020HFV temp(ANALOG_1);
 // if you have the sensor connected to ANALOG_2, use the following
-// ML8511A uv(ANALOG_2);
+// BD1020HFV temp(ANALOG_2);
 
 void setup() {
   // begin serial communication
@@ -29,17 +29,17 @@ void setup() {
   Wire.begin();
 
   // initialize the sensor with default settings
-  uv.init();
-
-  Serial.println("UV[mW/cm^2]");
+  temp.init();
+  
+  Serial.println("t[dg C]");
 }
 
 void loop() {
   // measure the sensor value
-  float uvValue = uv.measure();
+  float tempValue = temp.measure();
 
   // print the value to the serial port
-  Serial.println(uvValue);
+  Serial.println(tempValue);
 
   // wait 100 ms before the next measurement
   delay(100);
