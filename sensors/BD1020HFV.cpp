@@ -7,11 +7,12 @@
 class BD1020HFV {
   public:
     //Default constructor
-    BD1020HFV(void) {}
+    BD1020HFV(uint8_t position = ANALOG_1) {
+      _position = position;
+    }
     
     //Initialization function
-    uint8_t init(uint8_t position = ANALOG_1) {
-      _position = position;
+    uint8_t init(void) {
       return 0;
     }
     
