@@ -2,7 +2,7 @@
 #define _ML8511A_CPP
 
 #define ANALOG_1  A0
-#define ANALOG_2  A1
+#define ANALOG_2  A2
 
 class ML8511A {
   public:

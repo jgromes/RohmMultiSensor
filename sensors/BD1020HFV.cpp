@@ -2,7 +2,7 @@
 #define _BD1020HFV_CPP
 
 #define ANALOG_1  A0
-#define ANALOG_2  A1
+#define ANALOG_2  A2
 
 class BD1020HFV {
   public:
