@@ -1,10 +1,10 @@
-#######################################
+#########################################
 # Syntax Coloring Map For RohmMultiSensor
-#######################################
+#########################################
 
-#######################################
-# Datatypes (KEYWORD1)
-#######################################
+#########################################
+# Datatypes and Includes (KEYWORD1)
+#########################################
 
 RohmMultiSensor	KEYWORD1
 INCLUDE_ALL_SENSORS	KEYWORD1
@@ -39,51 +39,34 @@ INCLUDE_ML8511A	KEYWORD1
 BH1790GLC	KEYWORD1
 INCLUDE_BH1790GLC	KEYWORD1
 
-#######################################
+###########################################
 # Methods and Functions (KEYWORD2)
-#######################################
+###########################################
 
-#KX022_1020
-init	KEYWORD1
-measure	KEYWORD1
+#Common
 
-#BM1383GLV
-init	KEYWORD1
-measure	KEYWORD1
+init	KEYWORD2
+measure	KEYWORD2
 
-#BM1422GMV
-init	KEYWORD1
-measure	KEYWORD1
-isr	KEYWORD1
-setFlagDrdy	KEYWORD1
+#Sensor-specific
 
-#RPR_0521RS
-init	KEYWORD1
-measure	KEYWORD1
+#BM1422GMV, KX022-1020
+setFlagDrdy	KEYWORD2
 
-#BH1745NUC
-init	KEYWORD1
-measure	KEYWORD1
-
-#BD7411G
-init	KEYWORD1
-measure	KEYWORD1
-
-#BD1020HFV
-init	KEYWORD1
-measure	KEYWORD1
-
-#ML8511A
-init	KEYWORD1
-measure	KEYWORD1
-
-#BH1790GLC
-init	KEYWORD1
-measure	KEYWORD1
-
-#######################################
+###########################################
 # Constants (LITERAL1)
-#######################################
+###########################################
+
+#Common
+
+INT_0	LITERAL1
+INT_1	LITERAL1
+INT_NONE	LITERAL1
+
+ANALOG_1	LITERAL1
+ANALOG_2	LITERAL1
+
+#Sensor-specific
 
 KX022_1020_RANGE_2G	LITERAL1
 KX022_1020_RANGE_4G	LITERAL1
@@ -129,8 +112,6 @@ BM1422GMV_AVERAGE_2	LITERAL1
 BM1422GMV_AVERAGE_4	LITERAL1
 BM1422GMV_AVERAGE_8	LITERAL1
 BM1422GMV_AVERAGE_16	LITERAL1
-INT_0	LITERAL1
-INT_1	LITERAL1
 
 RPR_0521RS_MEAS_TIME_STBY_STBY	LITERAL1
 RPR_0521RS_MEAS_TIME_STBY_10_MS	LITERAL1
@@ -169,6 +150,3 @@ BH1745NUC_MEAS_TIME_5120_MS	LITERAL1
 BH1745NUC_ADC_GAIN_1	LITERAL1
 BH1745NUC_ADC_GAIN_2	LITERAL1
 BH1745NUC_ADC_GAIN_6	LITERAL1
-
-ANALOG_1	LITERAL1
-ANALOG_2	LITERAL1
