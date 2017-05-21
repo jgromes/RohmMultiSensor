@@ -29,8 +29,6 @@
 #define RPR_0521RS_DEVICE_ADDRESS                     0x38
 #define RPR_0521RS_PART_ID                            0x0A
 #define RPR_0521RS_MANUFACT_ID                        0xE0
-#define ALS                                           0x00
-#define PS                                            0x01
 
 //RPR_0521RS settings
 //RPR_0521RS_REG_MODE_CONTROL                                         MSB   LSB   DESCRIPTION
@@ -75,6 +73,10 @@
 
 class RPR_0521RS {
   public:
+    //Measurement variables
+    uint16_t ps = 0; //proximity value
+    float als = 0; //ambient light value in lx
+    
     //Default constructor
     RPR_0521RS(uint8_t address = RPR_0521RS_DEVICE_ADDRESS) {
       _address = address;
@@ -97,8 +99,8 @@ class RPR_0521RS {
       //gain and measurement time arrays
       uint8_t alsGainTable[4] = {1, 2, 64, 128};
       uint8_t psGainTable[3] = {1, 2, 4};
-      uint8_t alsMeasureTimeTable[13] = {0, 0, 0, 0, 0, 100, 100, 100, 400, 400, 400, 400, 50};
-      uint8_t psMeasureTimeTable[13] = {0, 10, 40, 100, 400, 50, 100, 400, 50, 100, 0, 400, 50};
+      uint16_t alsMeasureTimeTable[13] = {0, 0, 0, 0, 0, 100, 100, 100, 400, 400, 400, 400, 50};
+      uint16_t psMeasureTimeTable[13] = {0, 10, 40, 100, 400, 50, 100, 400, 50, 100, 0, 400, 50};
       
       //set gain and measurement time
       _alsData0Gain = alsGainTable[0];
@@ -109,47 +111,43 @@ class RPR_0521RS {
     }
     
     //Measurement function
-    float measure(uint8_t type = ALS) {
+    uint8_t measure(void) {
       //TODO: implement interrupt
-      if(type == ALS) {
-        //ambient light measurement
-        uint16_t rawValue[2];
-        float data0, data1, data1_0;
-        
-        //read raw 2-byte integer values
-        rawValue[0] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_LSB);
-        rawValue[1] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_LSB);
-        
-        //intermediate calculations
-        data0 = (float)rawValue[0] * (100 / _alsMeasurementTime) / _alsData0Gain;
-        data1 = (float)rawValue[1] * (100 / _alsMeasurementTime) / _alsData1Gain;
-        
-        //zero division check
-        if(data0 == 0) {
-          return(0);
-        }
-        
-        data1_0 = data1 / data0;
-        
-        //return real value in lx
-        if (data1_0 < 0.595) {
-          return(1.682 * data0 - 1.877 * data1);
-        } else if (data1_0 < 1.015) {
-          return(0.644 * data0 - 0.132 * data1);
-        } else if (data1_0 < 1.352) {
-          return(0.756 * data0 - 0.243 * data1);
-        } else if (data1_0 < 3.053) {
-          return(0.766 * data0 - 0.25 * data1);
-        }
-      } else if(type == PS) {
-        //proximity measurement
-        float value;
-        
-        //read the proximity value (does not have a real unit, this will only tell you whether an object is closer tha e.g. a few centimiters)
-        value = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_LSB);
-        
-        return(value);
+
+      //ambient light measurement
+      uint16_t rawValue[2];
+      float data0, data1, data1_0;
+      
+      //read raw 2-byte integer values
+      rawValue[0] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_LSB);
+      rawValue[1] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_LSB);
+      
+      //intermediate calculations
+      data0 = (float)rawValue[0] * (100 / _alsMeasurementTime) / _alsData0Gain;
+      data1 = (float)rawValue[1] * (100 / _alsMeasurementTime) / _alsData1Gain;
+      
+      //zero division check
+      if(data0 == 0) {
+        als = 0;
       }
+      
+      data1_0 = data1 / data0;
+      
+      //return real value in lx
+      if (data1_0 < 0.595) {
+        als = 1.682 * data0 - 1.877 * data1;
+      } else if (data1_0 < 1.015) {
+        als = 0.644 * data0 - 0.132 * data1;
+      } else if (data1_0 < 1.352) {
+        als = 0.756 * data0 - 0.243 * data1;
+      } else if (data1_0 < 3.053) {
+        als = 0.766 * data0 - 0.250 * data1;
+      }
+
+      //proximity measurement
+      //read the proximity value (does not have a real unit, this will only tell you whether an object is closer than e.g. a few centimiters)
+      ps = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_LSB); 
+
       return(0);
     }
   

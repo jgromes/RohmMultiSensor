@@ -26,12 +26,7 @@ BH1745NUC rgbc;
 // temperature sensor (BD1020HFV) is connected to ANALOG_1 header on the shield
 BD1020HFV temp(ANALOG_1);
 // temperature sensor (ML8511A) is connected to ANALOG_2 header on the shield
-ML8511A uv(ANALOG_2);
-
-// define the interrupt service routine for KX022-1020
-void acc_isr(void) {
-  acc.setFlagDrdy();
-}
+ML8511A uvr(ANALOG_2);
 
 void setup() {
   // begin serial communication
@@ -43,54 +38,49 @@ void setup() {
   Wire.begin();
 
   // initialize all the sensor with default settings
-  acc.init(acc_isr);
+  acc.init();
   bar.init();
   als.init();
   rgbc.init();
   temp.init();
-  uv.init();
+  uvr.init();
 
   Serial.println("X[g]\tY[g]\tZ[g]\tp[hPa]\tPS[cnt]\tALS[lx]\tR[-]\tG[-]\tB[-]\tC[-]\tt[dg C]\tUV[mW/cm^2]");
 }
 
 void loop() {
   // measure all the sensor values
-  float* accelValue = acc.measure();
-  float pressValue = bar.measure();
-  float psValue = als.measure(PS);
-  float alsValue = als.measure(ALS);
-  unsigned int* rgbcValue = rgbc.measure();
-  float tempValue = temp.measure();
-  float uvValue = uv.measure();
+  acc.measure();
+  bar.measure();
+  als.measure();
+  rgbc.measure();
+  temp.measure();
+  uvr.measure();
 
   // print the values to the serial port
-  Serial.print(accelValue[0]);
+  Serial.print(acc.x);
   Serial.print('\t');
-  Serial.print(accelValue[1]);
+  Serial.print(acc.y);
   Serial.print('\t');
-  Serial.print(accelValue[2]);
+  Serial.print(acc.z);
   Serial.print('\t');
-  Serial.print(pressValue);
+  Serial.print(bar.p);
   Serial.print('\t');
-  Serial.print(psValue);
+  Serial.print(als.ps);
   Serial.print('\t');
-  Serial.print(alsValue);
+  Serial.print(als.als);
   Serial.print('\t');
-  Serial.print(rgbcValue[0]);
+  Serial.print(rgbc.r);
   Serial.print('\t');
-  Serial.print(rgbcValue[1]);
+  Serial.print(rgbc.g);
   Serial.print('\t');
-  Serial.print(rgbcValue[2]);
+  Serial.print(rgbc.b);
   Serial.print('\t');
-  Serial.print(rgbcValue[3]);
+  Serial.print(rgbc.c);
   Serial.print('\t');
-  Serial.print(tempValue);
+  Serial.print(temp.t);
   Serial.print('\t');
-  Serial.println(uvValue);
-
-  // safely deallocate memory allocated for the dynamic arrays 'accelValue' and 'rgbcValue'
-  delete[] accelValue;
-  delete[] rgbcValue;
+  Serial.println(uvr.uv);
 
   // wait 100 ms before the next measurement
   delay(100);

@@ -45,6 +45,9 @@
 
 class BM1383GLV {
   public:
+    //Measurement variables
+    float p = 0; //pressure in hPa
+    
     //Default constructor
     BM1383GLV(uint8_t address = BM1383GLV_DEVICE_ADDRESS) {
       _address = address;
@@ -67,9 +70,8 @@ class BM1383GLV {
     }
     
     //Measurement function
-    float measure(void) {
+    uint8_t measure(void) {
       uint32_t rawValue;
-      float value;
       
       //TODO: implement interrupt
       
@@ -77,9 +79,9 @@ class BM1383GLV {
       rawValue = (((uint32_t)_utils.getRegValue(_address, BM1383GLV_REG_PRESSURE_MSB) << 16) | ((uint32_t)_utils.getRegValue(_address, BM1383GLV_REG_PRESSURE_MID) << 8) | _utils.getRegValue(_address, BM1383GLV_REG_PRESSURE_LSB, 7, 2)) >> 2;
       
       //calcute real pressure in hPa
-      value = rawValue / 2048.0;
+      p = rawValue / 2048.0;
       
-      return(value);
+      return(0);
     }
   
   private:

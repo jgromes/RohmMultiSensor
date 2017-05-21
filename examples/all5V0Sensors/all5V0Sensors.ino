@@ -6,9 +6,6 @@
  *                    BD1020HFV temperature sensor
  * 
  * Before powering up your Arduino, make sure to select 5V on jumper J15 on the shield!
- * 
- * NOTE: When using BD7411G Hall sensor with Arduino UNO, be sure to disconnect the sensor from the shield before uploading the sketch!
- *       Since BD7411G's OUT pin is directly connected to Arduino D0 (serial RX), any attempt to upload with the sensor connected will lead to avrdude: stk500_getsync() error.
  */
 
 // define all the sensors we will use
@@ -39,13 +36,13 @@ void setup() {
 
 void loop() {
   // measure all the sensor values
-  bool magFieldDetected = hall.measure();
-  float tempValue = temp.measure();
+  hall.measure();
+  temp.measure();
 
   // print the values to the serial port
-  Serial.print(magFieldDetected);
+  Serial.print(hall.mf);
   Serial.print('\t');
-  Serial.println(tempValue);
+  Serial.println(temp.t);
 
   // wait 100 ms before the next measurement
   delay(100);

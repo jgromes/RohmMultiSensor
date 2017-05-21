@@ -32,19 +32,16 @@ void setup() {
 
 void loop() {
   // measure the sensor values
-  unsigned int* rgbcValue = rgbc.measure();
+  rgbc.measure();
 
   // print the values to the serial port
-  Serial.print(rgbcValue[0]);
+  Serial.print(rgbc.r);
   Serial.print('\t');
-  Serial.print(rgbcValue[1]);
+  Serial.print(rgbc.g);
   Serial.print('\t');
-  Serial.print(rgbcValue[2]);
+  Serial.print(rgbc.b);
   Serial.print('\t');
-  Serial.println(rgbcValue[3]);
-
-  // safely deallocate memory allocated for the dynamic array 'rgbcValue'
-  delete[] rgbcValue;
+  Serial.println(rgbc.c);
 
   // wait 100 ms before the next measurement
   delay(100);

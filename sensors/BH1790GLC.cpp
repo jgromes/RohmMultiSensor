@@ -46,6 +46,10 @@
 
 class BH1790GLC {
   public:
+    //Measurement variables
+    int ledOn = 0;//LED-on data
+    int ledOff = 0;//LED-off data
+    
     //Default constructor
     BH1790GLC(uint8_t address = BH1790GLC_DEVICE_ADDRESS) {
       _address = address;
@@ -68,8 +72,7 @@ class BH1790GLC {
     }
     
     //Measurement function
-    int* measure(void) {
-      int* value = new int[2];
+    uint8_t measure(void) {
       uint8_t rawValue[4];
       
       //read the single byte led on/off data
@@ -79,10 +82,10 @@ class BH1790GLC {
       rawValue[3] = _utils.getRegValue(_address, BH1790GLC_REG_DATAOUT_LEDON_MSB);
       
       //convert raw data to 2-byte integer
-      value[0] = ((int)rawValue[3] << 8) | rawValue[2];
-      value[1] = ((int)rawValue[1] << 8) | rawValue[0];
+      ledOn = ((int)rawValue[3] << 8) | rawValue[2];
+      ledOff = ((int)rawValue[1] << 8) | rawValue[0];
       
-      return(value);
+      return(0);
     }
   
   private:

@@ -4,11 +4,6 @@
  * This sketch shows you how to detect magnetic field using BD7411G
  * 
  * Before powering up your Arduino, make sure to select 5V on jumper J15 on the shield!
- * 
- * NOTE: When using this sensor, be sure to disconnect it before uploading the sketch.
- *       BD7411G outputs HIGH if no magnetic field is present.
- *       Because this sensor is connected directly Arduino D0 (Serial RX),
- *       any attempt to upload with the sensor connected will lead to avrdude: stk500_getsync() error!
  */
 
 // define all the sensors we will use
@@ -34,8 +29,11 @@ void setup() {
 }
 
 void loop() {
+  // measure the sensor value
+  hall.measure();
+  
   // if a magnetic field is detected, print to serial
-  if(hall.measure()) {
+  if(hall.mf) {
     Serial.println("Magnetic field detected!");
   }
 
