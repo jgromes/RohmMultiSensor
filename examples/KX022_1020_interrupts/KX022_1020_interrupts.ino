@@ -1,25 +1,25 @@
 /*
- * BM1422GMV example
+ * KX022-1020 example
  * 
- * This sketch shows you how to correctly measure magnetic induction using BM1422GMV magnetometer.
+ * This sketch shows you how to correctly measure acceleration using KX022-1020 accelerometer with interrupts.
  * 
- * Before powering up your Arduino, make sure to select 1.8V on jumper J15 on the shield!
+ * Before powering up your Arduino, make sure to select 1.8V or 3V on jumper J15 on the shield!
  */
 
 // define the sensor we will use
-#define INCLUDE_BM1422GMV
+#define INCLUDE_KX022_1020
 
 // include the library
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class using interrupt 0
-BM1422GMV mag(INT_0);
+KX022_1020 acc(INT_0);
 // if you want to use interrupt 1, use the following
-// BM1422GMV mag(INT_1);
+// KX022_1020 acc(INT_1);
 
 // define the interrupt service routine
-void mag_isr(void) {
-  mag.setFlagDrdy();
+void acc_isr(void) {
+  acc.setFlagDrdy();
 }
 
 void setup() {
@@ -31,22 +31,22 @@ void setup() {
   // this function has to be called before any calls to .init()!
   Wire.begin();
 
-  // initialize the sensor with default settings
+  // initialize KX022-1020 with the default values
   // we have to provide the interrupt service routine to the .init() method
-  mag.init(mag_isr);
+  acc.init(acc_isr);
 
-  Serial.println("X[uT]\tY[uT]\tZ[uT]");
+  Serial.println("X[g]\tY[g]\tZ[g]");
 }
 
 void loop() {
   // measure the sensor values
-  if(mag.measure() == 0) {
+  if(acc.measure() == 0) {
     // if the values were successfully measured, print them to the serial port
-    Serial.print(mag.x);
+    Serial.print(acc.x);
     Serial.print('\t');
-    Serial.print(mag.y);
+    Serial.print(acc.y);
     Serial.print('\t');
-    Serial.println(mag.z);
+    Serial.println(acc.z);
   }
 
   // wait 100 ms before the next measurement

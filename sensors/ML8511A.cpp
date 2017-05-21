@@ -6,6 +6,9 @@
 
 class ML8511A {
   public:
+    //Measurement variables
+    float uv = 0; //UV radiation intensity in mW/cm^2
+    
     //Default constructor
     ML8511A(uint8_t position = ANALOG_1) {
       _position = position;
@@ -17,22 +20,21 @@ class ML8511A {
     }
     
     //Measurement function
-    float measure(void) {
+    uint8_t measure(void) {
       uint16_t rawValue;
-      float value;
       
       //read the analog value
       rawValue = analogRead(_position);
       
       //calculate real radiation intensity in mW/cm^2
-      value = 25 * (((float)rawValue * 5 / 1024) - 1) / 3;
+      uv = 25 * (((float)rawValue * 5 / 1024) - 1) / 3;
       
       //real radiation intensity cannot be less than zero
-      if(value < 0) {
-        value = 0;
+      if(uv < 0) {
+        uv = 0;
       }
       
-      return(value);
+      return(0);
     }
   
   private:
