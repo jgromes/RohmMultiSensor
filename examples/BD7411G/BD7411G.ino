@@ -20,10 +20,6 @@ void setup() {
   Serial.begin(9600);
   Serial.println();
 
-  // begin the TWI (I2C) interface.
-  // this function has to be called before any calls to .init()!
-  Wire.begin();
-
   // initialize the sensor with default settings
   hall.init();
 }
