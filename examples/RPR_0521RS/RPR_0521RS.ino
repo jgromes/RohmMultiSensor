@@ -32,12 +32,13 @@ void setup() {
 
 void loop() {
   // measure the sensor values
-  als.measure();
+  float psValue = als.measure(PS);
+  float alsValue = als.measure(ALS);
 
   // print the values to the serial port
-  Serial.print(als.ps);
+  Serial.print(psValue);
   Serial.print('\t');
-  Serial.println(als.als);
+  Serial.println(alsValue);
 
   // wait 100 ms before the next measurement
   delay(100);

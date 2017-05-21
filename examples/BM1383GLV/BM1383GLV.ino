@@ -32,10 +32,10 @@ void setup() {
 
 void loop() {
   // measure the sensor value
-  bar.measure();
+  float pressValue = bar.measure();
 
   // print the value to the serial port
-  Serial.println(bar.p);
+  Serial.println(pressValue);
 
   // wait 100 ms before the next measurement
   delay(100);

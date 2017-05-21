@@ -36,10 +36,10 @@ void setup() {
 
 void loop() {
   // measure the sensor value
-  temp.measure();
+  float tempValue = temp.measure();
 
   // print the value to the serial port
-  Serial.println(temp.t);
+  Serial.println(tempValue);
 
   // wait 100 ms before the next measurement
   delay(100);
