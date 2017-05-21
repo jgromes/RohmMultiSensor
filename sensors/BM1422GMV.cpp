@@ -43,7 +43,6 @@
 #define BM1422GMV_WHO_AM_I                            0x41
 #define INT_0                                         0x00
 #define INT_1                                         0x01
-#define INT_NONE                                      0xFF
 
 //BM1422GMV settings
 //BM1422GMV_REG_STA_1                                                 MSB   LSB   DESCRIPTION
@@ -78,11 +77,6 @@
 
 class BM1422GMV {
   public:
-    //Measurement variables
-    float x = 0; //X-axis magnetic induction in uT
-    float y = 0; //Y-axis magnetic induction in uT
-    float z = 0; //Z-axis magnetic induction in uT
-    
     //Default constructor
     BM1422GMV(uint8_t intNum = INT_0, uint8_t address = BM1422GMV_DEVICE_ADDRESS_L) {
       _intNum = intNum;
@@ -124,30 +118,22 @@ class BM1422GMV {
     }
     
     //Measurement function
-    //TODO: implement single-axis measurement
-    uint8_t measure(void) {
-      //if interrupts are used, check DRDY flag
-      if(_intNum != INT_NONE) {
-        //start new measurement
-        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_3, BM1422GMV_FORCE_MEASUREMENT, 6, 6);
-        
-        //if the flag is present, read measured values and calculate magnetic induction in uT
-        if(_flagDrdy) {
-          x = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
-          y = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
-          z = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_LSB)) / _outputSens;
-          
-          //reset flag
-          _flagDrdy = false;
-        
-          //acceleration values were successfully updated, return 0
-          return(0);
-        }
-      } else {
-        //BM1422GMV does not work without interrupts
-      }
+    float* measure(void) {
+      float* value = new float[3];
       
-      return(1);
+      //start new measurement
+      _utils.setRegValue(_address, BM1422GMV_REG_CNTL_3, BM1422GMV_FORCE_MEASUREMENT, 6, 6);
+      
+      //wait for DRDY interrupt
+      while(!_flagDrdy);
+      _flagDrdy = false;
+      
+      //read measured values and calculate magnetic induction in uT
+      value[0] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
+      value[1] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
+      value[2] = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_LSB)) / _outputSens;
+      
+      return(value);
     }
     
     //Function to be called inside ISR, this will set data ready flag

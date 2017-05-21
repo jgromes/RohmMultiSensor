@@ -62,7 +62,6 @@
 #define KX022_1020_WHO_AM_I                           0x14
 #define INT_0                                         0x00
 #define INT_1                                         0x01
-#define INT_NONE                                      0xFF
 
 //KX022-1020 settings
 //KX022_1020_REG_CNTL1                                                MSB   LSB   DESCRIPTION
@@ -134,49 +133,13 @@
 
 class KX022_1020 {
   public:
-    //Measurement variables
-    float x = 0; //X-axis acceleration in g force
-    float y = 0; //Y-axis acceleration in g force
-    float z = 0; //Z-axis acceleration in g force
-    
     //Default constructor
-    KX022_1020(uint8_t intNum = INT_NONE, uint8_t address = KX022_1020_DEVICE_ADDRESS_L) {
+    KX022_1020(uint8_t intNum = INT_0, uint8_t address = KX022_1020_DEVICE_ADDRESS_L) {
       _intNum = intNum;
       _address = address;
     }
     
     //Initialization function
-    uint8_t init(uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
-      //disable interrupt
-      _intNum = INT_NONE;
-      
-      //check manufacturer ID
-      if(_utils.getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
-        //if the manufacturer ID does not match cancel initialization
-        return(1);
-      }
-      
-      //set control registers according to datasheet and user settings
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY, 7, 7);
-      delay(50); //wait for standby mode
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_OFF | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF, 6, 0);
-      _utils.setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
-      _utils.setRegValue(_address, KX022_1020_REG_INC1, KX022_1020_INT1_DISABLE, 5, 5);
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
-      
-      //set sensitivity according to user settings
-      switch(range) {
-        case KX022_1020_RANGE_2G: { _accelSensitivity = 16384;
-                                  } break;
-        case KX022_1020_RANGE_4G: { _accelSensitivity = 8192;
-                                  } break;
-        case KX022_1020_RANGE_8G: { _accelSensitivity = 4096;
-                                  } break;
-      }
-      return(0);
-    }
-    
-    //Initialization function overload with interrupts
     uint8_t init(void func(void), uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
       //check manufacturer ID
       if(_utils.getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
@@ -208,33 +171,19 @@ class KX022_1020 {
     }
     
     //Measurement function
-    uint8_t measure(void) {
-      //if interrupts are used, check DRDY flag
-      if(_intNum != INT_NONE) {
-        //if the flag is present, read the measured value as 2-byte integer and calculate the real acceleration in g force
-        if(_flagDrdy) {
-          x = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
-          y = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
-          z = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
-        
-          //reset flag
-          _flagDrdy = false;
-        
-          //acceleration values were successfully updated, return 0
-          return(0);
-        }
-      } else {
-        //read the measured value as 2-byte integer and calculate the real acceleration in g force
-        x = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
-        y = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
-        z = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
-        
-        //acceleration values were successfully updated, return 0
-        return(0);
-      }
+    float* measure(void) {
+      float* value = new float[3];
       
-      //acceleration values were not updated, return 1
-      return(1);
+      //wait for DRDY interrupt
+      while(!_flagDrdy);
+      _flagDrdy = false;
+      
+      //read the measured value as 2-byte integer and calculate the real acceleration in g force
+      value[0] = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
+      value[1] = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
+      value[2] = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
+      
+      return(value);
     }
     
     //TODO: implement interrupts for value, tilt, tap, etc.

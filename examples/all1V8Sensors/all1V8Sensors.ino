@@ -9,9 +9,9 @@
  * Before powering up your Arduino, make sure to select 1.8V on jumper J15 on the shield!
  * 
  * Interrupt setting: KX022-1020 is connected to I2C_1 and INTR1 on J3 is shorted.
- *                    BM1383GLV is connected to I2C_2 and does not require interrupt connection.
- *                    BM1422GMV is connected to I2C_3 and INTR5 on J4 is shorted.
- *                    
+ *                    BM1422GMV is connected to I2C_2 and INTR4 on J4 is shorted.
+ *                    BM1383GLV does not require interrupt connection.
+ *                    See library reference for details.
  */
 
 // define all the sensors we will use
@@ -55,24 +55,28 @@ void setup() {
 
 void loop() {
   // measure all the sensor values
-  acc.measure();
-  bar.measure();
-  mag.measure();
+  float* accelValue = acc.measure();
+  float pressValue = bar.measure();
+  float* magValue = mag.measure();
 
   // print the values to the serial port
-  Serial.print(acc.x);
+  Serial.print(accelValue[0]);
   Serial.print('\t');
-  Serial.print(acc.y);
+  Serial.print(accelValue[1]);
   Serial.print('\t');
-  Serial.print(acc.z);
+  Serial.print(accelValue[2]);
   Serial.print('\t');
-  Serial.print(bar.p);
+  Serial.print(pressValue);
   Serial.print('\t');
-  Serial.print(mag.x);
+  Serial.print(magValue[0]);
   Serial.print('\t');
-  Serial.print(mag.y);
+  Serial.print(magValue[1]);
   Serial.print('\t');
-  Serial.println(mag.z);
+  Serial.println(magValue[2]);
+
+  // safely deallocate memory allocated for the dynamic arrays 'accelValue' and 'magValue'
+  delete[] accelValue;
+  delete[] magValue;
 
   // wait 100 ms before the next measurement
   delay(100);

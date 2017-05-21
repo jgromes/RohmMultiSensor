@@ -3,9 +3,6 @@
 
 class BD7411G {
   public:
-    //Measurement variables
-    bool mf = false; //magnetic field presence
-    
     //Default constructor
     BD7411G(void) {}
     
@@ -16,15 +13,13 @@ class BD7411G {
     }
     
     //Measurement function
-    uint8_t measure() {
+    bool measure() {
       //if the sensor output is LOW, magnetic field was detected
       if(digitalRead(_pin) == 0) {
-        mf = true;
+        return(true);
       } else {
-        mf = false;
+        return(false);
       }
-      
-      return(0);
     }
   
   private:
