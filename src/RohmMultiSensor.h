@@ -9,7 +9,7 @@
 
   #include <Wire.h>
   
-  #include "../extra/utilities.cpp"
+  #include "../utilities/utilities.cpp"
 
   #ifdef INCLUDE_ALL_SENSORS
     #warning "Do NOT use this include unless you are ABSOLUTELY sure what you are doing!"
@@ -45,39 +45,39 @@
   #endif
   
   #ifdef INCLUDE_KX022_1020
-    #include "../extra/KX022_1020.cpp"
+    #include "../utilities/KX022_1020.cpp"
   #endif
 
   #ifdef INCLUDE_BM1383GLV
-    #include "../extra/BM1383GLV.cpp"
+    #include "../utilities/BM1383GLV.cpp"
   #endif
 
   #ifdef INCLUDE_BM1422GMV
-    #include "../extra/BM1422GMV.cpp"
+    #include "../utilities/BM1422GMV.cpp"
   #endif
 
   #ifdef INCLUDE_RPR_0521RS
-    #include "../extra/RPR_0521RS.cpp"
+    #include "../utilities/RPR_0521RS.cpp"
   #endif
 
   #ifdef INCLUDE_BH1745NUC
-    #include "../extra/BH1745NUC.cpp"
+    #include "../utilities/BH1745NUC.cpp"
   #endif
 
   #ifdef INCLUDE_BD7411G
-    #include "../extra/BD7411G.cpp"
+    #include "../utilities/BD7411G.cpp"
   #endif
 
   #ifdef INCLUDE_BD1020HFV
-    #include "../extra/BD1020HFV.cpp"
+    #include "../utilities/BD1020HFV.cpp"
   #endif
 
   #ifdef INCLUDE_ML8511A
-    #include "../extra/ML8511A.cpp"
+    #include "../utilities/ML8511A.cpp"
   #endif
   
   #ifdef INCLUDE_BH1790GLC
-    #include "../extra/BH1790GLC.cpp"
+    #include "../utilities/BH1790GLC.cpp"
   #endif
   
 #endif
