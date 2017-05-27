@@ -114,7 +114,7 @@ class BM1422GMV {
         _utils.setRegValue(_address, BM1422GMV_REG_CNTL_1, BM1422GMV_ACTIVE | output | mode);
         _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_MSB, 0x00);
         _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_LSB, 0x00);
-        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_LOW, 3, 2);
+        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_HIGH, 3, 2);
         _utils.setRegValue(_address, BM1422GMV_REG_AVE_A, BM1422GMV_AVERAGE_4, 4, 2);
       } else if(mode == BM1422GMV_MODE_CONTINUOUS) {
         //TODO: implement continuous mode
