@@ -157,7 +157,8 @@ class BM1422GMV {
     
   private:
     utilities _utils;
-    uint8_t _address, _intNum, _outputSens;
+    uint8_t _address, _intNum;
+    uint8_t _outputSens = 24;
     volatile bool _flagDrdy = false;
 };
 

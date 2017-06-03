@@ -95,7 +95,7 @@ class RPR_0521RS {
       _utils.setRegValue(_address, RPR_0521RS_REG_PS_CONTROL, RPR_0521RS_PS_GAIN_1, 5, 4);
       _utils.setRegValue(_address, RPR_0521RS_REG_MODE_CONTROL, RPR_0521RS_ALS_ON | RPR_0521RS_PS_ON | measurementTime);
       
-      //TODO: implement gain and measurement time selection 
+      //TODO: implement gain and measurement time selection
       //gain and measurement time arrays
       uint8_t alsGainTable[4] = {1, 2, 64, 128};
       uint8_t psGainTable[3] = {1, 2, 4};
@@ -153,7 +153,10 @@ class RPR_0521RS {
   
   private:
     utilities _utils;
-    uint8_t _address, _alsData0Gain, _alsData1Gain, _alsMeasurementTime;
+    uint8_t _address, 
+    uint8_t _alsData0Gain = 1;
+    uint8_t _alsData1Gain = 1;
+    uint8_t _alsMeasurementTime = 0;
     
 };
 

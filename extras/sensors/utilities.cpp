@@ -42,7 +42,7 @@ class utilities {
       
       Wire.requestFrom(deviceAddress, len);
       
-      uint8_t i;
+      uint8_t i = 0;
       while(Wire.available()) {
         inBytes[i++] = Wire.read();
       }

@@ -28,7 +28,7 @@ class BD7411G {
     }
   
   private:
-    uint8_t _pin;
+    uint8_t _pin = 0;
 };
 
 #endif
