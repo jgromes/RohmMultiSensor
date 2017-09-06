@@ -153,7 +153,7 @@ class RPR_0521RS {
   
   private:
     utilities _utils;
-    uint8_t _address, 
+    uint8_t _address;
     uint8_t _alsData0Gain = 1;
     uint8_t _alsData1Gain = 1;
     uint8_t _alsMeasurementTime = 0;
