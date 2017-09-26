@@ -13,11 +13,11 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class with the default setting (sensor connected to ANALOG_1)
-BD1020HFV temp;
+BD1020HFV sensorTmp;
 // the above is equivalent to
-// BD1020HFV temp(ANALOG_1);
+// BD1020HFV sensorTmp(ANALOG_1);
 // if you have the sensor connected to ANALOG_2, use the following
-// BD1020HFV temp(ANALOG_2);
+// BD1020HFV sensorTmp(ANALOG_2);
 
 void setup() {
   // begin serial communication
@@ -25,17 +25,17 @@ void setup() {
   Serial.println();
 
   // initialize the sensor with default settings
-  temp.init();
+  sensorTmp.init();
   
   Serial.println("t[dg C]");
 }
 
 void loop() {
   // measure the sensor value
-  temp.measure();
+  sensorTmp.measure();
 
   // print the value to the serial port
-  Serial.println(temp.t);
+  Serial.println(sensorTmp.temp);
 
   // wait 100 ms before the next measurement
   delay(100);

@@ -16,7 +16,7 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class
-BH1790GLC pulse;
+BH1790GLC sensorPulse;
 
 void setup() {
   // begin serial communication
@@ -28,18 +28,18 @@ void setup() {
   Wire.begin();
 
   // initialize the sensor with default settings
-  pulse.init();
+  sensorPulse.init();
 }
 
 void loop() {
   // measure the sensor values
-  pulse.measure();
+  sensorPulse.measure();
 
   // print the values to the serial port
   // use the Serial Plotter to visualize the data
-  Serial.print(pulse.ledOn);
+  Serial.print(sensorPulse.ledOn);
   Serial.print('\t');
-  Serial.println(pulse.ledOff);
+  Serial.println(sensorPulse.ledOff);
 
   // wait 100 ms before the next measurement
   delay(100);

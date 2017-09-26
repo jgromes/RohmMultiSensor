@@ -13,7 +13,7 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class with default settings
-KX022_1020 acc;
+KX022_1020 sensorAcc;
 // the above is equivalent to
 // KX022_1020 acc(INT_NONE);
 
@@ -27,21 +27,21 @@ void setup() {
   Wire.begin();
 
   // initialize KX022-1020 with the default values
-  acc.init();
+  sensorAcc.init();
 
   Serial.println("X[g]\tY[g]\tZ[g]");
 }
 
 void loop() {
   // measure the sensor values
-  acc.measure();
+  sensorAcc.measure();
   
   // print the values to the serial port
-  Serial.print(acc.x);
+  Serial.print(sensorAcc.accelX);
   Serial.print('\t');
-  Serial.print(acc.y);
+  Serial.print(sensorAcc.accelY);
   Serial.print('\t');
-  Serial.println(acc.z);
+  Serial.println(sensorAcc.accelZ);
 
   // wait 100 ms before the next measurement
   delay(100);

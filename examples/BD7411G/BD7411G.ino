@@ -13,7 +13,7 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class
-BD7411G hall;
+BD7411G sensorHall;
 
 void setup() {
   // begin serial communication
@@ -21,15 +21,15 @@ void setup() {
   Serial.println();
 
   // initialize the sensor with default settings
-  hall.init();
+  sensorHall.init();
 }
 
 void loop() {
   // measure the sensor value
-  hall.measure();
+  sensorHall.measure();
   
   // if a magnetic field is detected, print to serial
-  if(hall.mf) {
+  if(sensorHall.magField) {
     Serial.println("Magnetic field detected!");
   }
 

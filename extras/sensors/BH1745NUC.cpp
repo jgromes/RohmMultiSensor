@@ -50,10 +50,10 @@
 class BH1745NUC {
   public:
     //Measurement variables
-    uint16_t r = 0; //red value as a 16-bit integer
-    uint16_t g = 0; //green value as a 16-bit integer
-    uint16_t b = 0; //blue value as a 16-bit integer
-    uint16_t c = 0; //clear value as a 16-bit integer
+    uint16_t red = 0; //red value as a 16-bit integer
+    uint16_t green = 0; //green value as a 16-bit integer
+    uint16_t blue = 0; //blue value as a 16-bit integer
+    uint16_t clear = 0; //clear value as a 16-bit integer
   
     //Default constructor
     BH1745NUC(uint8_t address = BH1745NUC_DEVICE_ADDRESS_H) {
@@ -81,10 +81,10 @@ class BH1745NUC {
       //TODO: implement interrupt
       
       //read measured RGBC value
-      r = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_LSB);
-      g = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_LSB);
-      b = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_LSB);
-      c = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_LSB);
+      red = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_LSB);
+      green = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_LSB);
+      blue = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_LSB);
+      clear = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_LSB);
       
       //color values were successfully updated, return 0
       return(0);

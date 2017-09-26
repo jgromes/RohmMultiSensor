@@ -74,8 +74,8 @@
 class RPR_0521RS {
   public:
     //Measurement variables
-    uint16_t ps = 0; //proximity value
-    float als = 0; //ambient light value in lx
+    uint16_t prox = 0; //proximity value
+    float ambLight = 0; //ambient light value in lx
     
     //Default constructor
     RPR_0521RS(uint8_t address = RPR_0521RS_DEVICE_ADDRESS) {
@@ -128,25 +128,25 @@ class RPR_0521RS {
       
       //zero division check
       if(data0 == 0) {
-        als = 0;
+        ambLight = 0;
       }
       
       data1_0 = data1 / data0;
       
       //return real value in lx
       if (data1_0 < 0.595) {
-        als = 1.682 * data0 - 1.877 * data1;
+        ambLight = 1.682 * data0 - 1.877 * data1;
       } else if (data1_0 < 1.015) {
-        als = 0.644 * data0 - 0.132 * data1;
+        ambLight = 0.644 * data0 - 0.132 * data1;
       } else if (data1_0 < 1.352) {
-        als = 0.756 * data0 - 0.243 * data1;
+        ambLight = 0.756 * data0 - 0.243 * data1;
       } else if (data1_0 < 3.053) {
-        als = 0.766 * data0 - 0.250 * data1;
+        ambLight = 0.766 * data0 - 0.250 * data1;
       }
 
       //proximity measurement
       //read the proximity value (does not have a real unit, this will only tell you whether an object is closer than e.g. a few centimiters)
-      ps = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_LSB); 
+      prox = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_LSB); 
 
       return(0);
     }

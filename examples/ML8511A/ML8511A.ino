@@ -13,11 +13,11 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class with the default setting (sensor connected to ANALOG_1)
-ML8511A uvr;
+ML8511A sensorUV;
 // the above is equivalent to
-// ML8511A uv(ANALOG_1);
+// ML8511A sensorUV(ANALOG_1);
 // if you have the sensor connected to ANALOG_2, use the following
-// ML8511A uv(ANALOG_2);
+// ML8511A sensorUV(ANALOG_2);
 
 void setup() {
   // begin serial communication
@@ -25,17 +25,17 @@ void setup() {
   Serial.println();
 
   // initialize the sensor with default settings
-  uvr.init();
+  sensorUV.init();
 
   Serial.println("UV[mW/cm^2]");
 }
 
 void loop() {
   // measure the sensor value
-  uvr.measure();
+  sensorUV.measure();
 
   // print the value to the serial port
-  Serial.println(uvr.uv);
+  Serial.println(sensorUV.uvRad);
 
   // wait 100 ms before the next measurement
   delay(100);

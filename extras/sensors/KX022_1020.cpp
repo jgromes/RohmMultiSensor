@@ -135,9 +135,9 @@
 class KX022_1020 {
   public:
     //Measurement variables
-    float x = 0; //X-axis acceleration in g force
-    float y = 0; //Y-axis acceleration in g force
-    float z = 0; //Z-axis acceleration in g force
+    float accelX = 0; //X-axis acceleration in g force
+    float accelY = 0; //Y-axis acceleration in g force
+    float accelZ = 0; //Z-axis acceleration in g force
     
     //Default constructor
     KX022_1020(uint8_t intNum = INT_NONE, uint8_t address = KX022_1020_DEVICE_ADDRESS_L) {
@@ -213,9 +213,9 @@ class KX022_1020 {
       if(_intNum != INT_NONE) {
         //if the flag is present, read the measured value as 2-byte integer and calculate the real acceleration in g force
         if(_flagDrdy) {
-          x = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
-          y = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
-          z = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
+          accelX = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
+          accelY = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
+          accelZ = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
         
           //reset flag
           _flagDrdy = false;
@@ -225,9 +225,9 @@ class KX022_1020 {
         }
       } else {
         //read the measured value as 2-byte integer and calculate the real acceleration in g force
-        x = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
-        y = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
-        z = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
+        accelX = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
+        accelY = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
+        accelZ = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
         
         //acceleration values were successfully updated, return 0
         return(0);

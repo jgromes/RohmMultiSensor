@@ -13,7 +13,7 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class
-BH1745NUC rgbc;
+BH1745NUC sensorColor;
 
 void setup() {
  // begin serial communication
@@ -25,23 +25,23 @@ void setup() {
   Wire.begin();
 
   // initialize the sensor with default settings
-  rgbc.init();
+  sensorColor.init();
 
   Serial.println("R[-]\tG[-]\tB[-]\tC[-]");
 }
 
 void loop() {
   // measure the sensor values
-  rgbc.measure();
+  sensorColor.measure();
 
   // print the values to the serial port
-  Serial.print(rgbc.r);
+  Serial.print(sensorColor.red);
   Serial.print('\t');
-  Serial.print(rgbc.g);
+  Serial.print(sensorColor.green);
   Serial.print('\t');
-  Serial.print(rgbc.b);
+  Serial.print(sensorColor.blue);
   Serial.print('\t');
-  Serial.println(rgbc.c);
+  Serial.println(sensorColor.clear);
 
   // wait 100 ms before the next measurement
   delay(100);

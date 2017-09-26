@@ -79,9 +79,9 @@
 class BM1422GMV {
   public:
     //Measurement variables
-    float x = 0; //X-axis magnetic induction in uT
-    float y = 0; //Y-axis magnetic induction in uT
-    float z = 0; //Z-axis magnetic induction in uT
+    float magX = 0; //X-axis magnetic induction in uT
+    float magY = 0; //Y-axis magnetic induction in uT
+    float magZ = 0; //Z-axis magnetic induction in uT
     
     //Default constructor
     BM1422GMV(uint8_t intNum = INT_0, uint8_t address = BM1422GMV_DEVICE_ADDRESS_L) {
@@ -133,9 +133,9 @@ class BM1422GMV {
         
         //if the flag is present, read measured values and calculate magnetic induction in uT
         if(_flagDrdy) {
-          x = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
-          y = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
-          z = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_LSB)) / _outputSens;
+          magX = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
+          magY = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
+          magZ = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_LSB)) / _outputSens;
           
           //reset flag
           _flagDrdy = false;

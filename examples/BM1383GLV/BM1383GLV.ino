@@ -13,7 +13,7 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class
-BM1383GLV bar;
+BM1383GLV sensorPress;
 
 void setup() {
   // begin serial communication
@@ -25,17 +25,17 @@ void setup() {
   Wire.begin();
 
   // initialize the sensor with default settings
-  bar.init();
+  sensorPress.init();
 
   Serial.println("p[hPa]");
 }
 
 void loop() {
   // measure the sensor value
-  bar.measure();
+  sensorPress.measure();
 
   // print the value to the serial port
-  Serial.println(bar.p);
+  Serial.println(sensorPress.pres);
 
   // wait 100 ms before the next measurement
   delay(100);

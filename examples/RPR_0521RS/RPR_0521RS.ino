@@ -13,7 +13,7 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class
-RPR_0521RS als;
+RPR_0521RS sensorAls;
 
 void setup() {
   // begin serial communication
@@ -25,19 +25,19 @@ void setup() {
   Wire.begin();
 
   // initialize the sensor with default settings
-  als.init();
+  sensorAls.init();
 
-  Serial.println("PS[cnt]\tALS[lx]");
+  Serial.println("PS[-]\tALS[lx]");
 }
 
 void loop() {
   // measure the sensor values
-  als.measure();
+  sensorAls.measure();
 
   // print the values to the serial port
-  Serial.print(als.ps);
+  Serial.print(sensorAls.prox);
   Serial.print('\t');
-  Serial.println(als.als);
+  Serial.println(sensorAls.ambLight);
 
   // wait 100 ms before the next measurement
   delay(100);

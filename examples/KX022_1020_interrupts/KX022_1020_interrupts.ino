@@ -13,13 +13,13 @@
 #include <RohmMultiSensor.h>
 
 // instantiate the sensor's class using interrupt 0
-KX022_1020 acc(INT_0);
+KX022_1020 sensorAcc(INT_0);
 // if you want to use interrupt 1, use the following
-// KX022_1020 acc(INT_1);
+// KX022_1020 sensorAcc(INT_1);
 
 // define the interrupt service routine
 void acc_isr(void) {
-  acc.setFlagDrdy();
+  sensorAcc.setFlagDrdy();
 }
 
 void setup() {
@@ -33,20 +33,20 @@ void setup() {
 
   // initialize KX022-1020 with the default values
   // we have to provide the interrupt service routine to the .init() method
-  acc.init(acc_isr);
+  sensorAcc.init(acc_isr);
 
   Serial.println("X[g]\tY[g]\tZ[g]");
 }
 
 void loop() {
   // measure the sensor values
-  if(acc.measure() == 0) {
+  if(sensorAcc.measure() == 0) {
     // if the values were successfully measured, print them to the serial port
-    Serial.print(acc.x);
+    Serial.print(sensorAcc.accelX);
     Serial.print('\t');
-    Serial.print(acc.y);
+    Serial.print(sensorAcc.accelY);
     Serial.print('\t');
-    Serial.println(acc.z);
+    Serial.println(sensorAcc.accelZ);
   }
 
   // wait 100 ms before the next measurement

@@ -7,7 +7,7 @@
 class BD1020HFV {
   public:
     //Measurement variables
-    float t = 0; //temperature in deg. C
+    float temp = 0; //temperature in deg. C
     
     //Default constructor
     BD1020HFV(uint8_t position = ANALOG_1) {
@@ -27,7 +27,7 @@ class BD1020HFV {
       rawValue = analogRead(_position);
       
       //calculate real temperature in deg. C
-      t = -(1000 * ((float)rawValue * 5 / 1024) - 1546) / 8.2;
+      temp = -(1000 * ((float)rawValue * 5 / 1024) - 1546) / 8.2;
       
       return(0);
     }
