@@ -1,10 +1,10 @@
-#ifndef _ML8511A_CPP
-#define _ML8511A_CPP
+#ifndef _ROHM_MULTI_SENSOR_ML8511A_CPP
+#define _ROHM_MULTI_SENSOR_ML8511A_CPP
 
 #define ANALOG_1  A0
 #define ANALOG_2  A2
 
-class ML8511A {
+class ML8511A: public Sensor {
   public:
     //Measurement variables
     float uvRad = 0; //UV radiation intensity in mW/cm^2

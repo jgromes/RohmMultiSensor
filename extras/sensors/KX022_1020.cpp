@@ -1,5 +1,5 @@
-#ifndef _KX022_1020_CPP
-#define _KX022_1020_CPP
+#ifndef _ROHM_MULTI_SENSOR_KX022_1020_CPP
+#define _ROHM_MULTI_SENSOR_KX022_1020_CPP
 
 //KX022-1020 register map
 #define KX022_1020_REG_XHPL                           0x00
@@ -132,7 +132,7 @@
 #define KX022_1020_INT1_TILT_OFF                      0b00000000  //  0     0     interrupt will not be triggered on tilt detection
 #define KX022_1020_INT1_TILT_ON                       0b00000001  //  0     0     interrupt will be triggered on tilt detection
 
-class KX022_1020 {
+class KX022_1020: public Sensor {
   public:
     //Measurement variables
     float accelX = 0; //X-axis acceleration in g force
@@ -151,18 +151,18 @@ class KX022_1020 {
       _intNum = INT_NONE;
       
       //check manufacturer ID
-      if(_utils.getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
+      if(getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
         //if the manufacturer ID does not match cancel initialization
         return(1);
       }
       
       //set control registers according to datasheet and user settings
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY, 7, 7);
+      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY, 7, 7);
       delay(50); //wait for standby mode
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_OFF | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF, 6, 0);
-      _utils.setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
-      _utils.setRegValue(_address, KX022_1020_REG_INC1, KX022_1020_INT1_DISABLE, 5, 5);
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
+      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_OFF | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF, 6, 0);
+      setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
+      setRegValue(_address, KX022_1020_REG_INC1, KX022_1020_INT1_DISABLE, 5, 5);
+      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
       
       //set sensitivity according to user settings
       switch(range) {
@@ -179,7 +179,7 @@ class KX022_1020 {
     //Initialization function overload with interrupts
     uint8_t init(void func(void), uint8_t range = KX022_1020_RANGE_4G, uint8_t rate = KX022_1020_OUTPUT_RATE_50_HZ) {
       //check manufacturer ID
-      if(_utils.getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
+      if(getRegValue(_address, KX022_1020_REG_WHO_AM_I) != KX022_1020_WHO_AM_I) {
         //if the manufacturer ID does not match cancel initialization
         return(1);
       }
@@ -189,11 +189,11 @@ class KX022_1020 {
       _flagDrdy = false;
       
       //set control registers according to datasheet and user settings
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY | KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_ON | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF);
-      _utils.setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
-      _utils.setRegValue(_address, KX022_1020_REG_INC1, KX022_1020_INT1_ENABLE | KX022_1020_INT1_ACTIVE_HIGH | KX022_1020_INT1_LATCH_OFF, 5, 3);
-      _utils.setRegValue(_address, KX022_1020_REG_INC4, KX022_1020_INT1_DATA_READY_ON, 4, 4);
-      _utils.setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
+      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY | KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_ON | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF);
+      setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
+      setRegValue(_address, KX022_1020_REG_INC1, KX022_1020_INT1_ENABLE | KX022_1020_INT1_ACTIVE_HIGH | KX022_1020_INT1_LATCH_OFF, 5, 3);
+      setRegValue(_address, KX022_1020_REG_INC4, KX022_1020_INT1_DATA_READY_ON, 4, 4);
+      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
       
       //set sensitivity according to user settings
       switch(range) {
@@ -213,9 +213,9 @@ class KX022_1020 {
       if(_intNum != INT_NONE) {
         //if the flag is present, read the measured value as 2-byte integer and calculate the real acceleration in g force
         if(_flagDrdy) {
-          accelX = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
-          accelY = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
-          accelZ = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
+          accelX = (float)((getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
+          accelY = (float)((getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
+          accelZ = (float)((getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
         
           //reset flag
           _flagDrdy = false;
@@ -225,9 +225,9 @@ class KX022_1020 {
         }
       } else {
         //read the measured value as 2-byte integer and calculate the real acceleration in g force
-        accelX = (float)((_utils.getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
-        accelY = (float)((_utils.getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
-        accelZ = (float)((_utils.getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | _utils.getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
+        accelX = (float)((getRegValue(_address, KX022_1020_REG_XOUTH) << 8) | getRegValue(_address, KX022_1020_REG_XOUTL)) / (float)_accelSensitivity;
+        accelY = (float)((getRegValue(_address, KX022_1020_REG_YOUTH) << 8) | getRegValue(_address, KX022_1020_REG_YOUTL)) / (float)_accelSensitivity;
+        accelZ = (float)((getRegValue(_address, KX022_1020_REG_ZOUTH) << 8) | getRegValue(_address, KX022_1020_REG_ZOUTL)) / (float)_accelSensitivity;
         
         //acceleration values were successfully updated, return 0
         return(0);
@@ -245,7 +245,6 @@ class KX022_1020 {
     }
   
   private:
-    utilities _utils;
     uint8_t _address, _intNum;
     uint16_t _accelSensitivity = 8192;
     volatile bool _flagDrdy = false;

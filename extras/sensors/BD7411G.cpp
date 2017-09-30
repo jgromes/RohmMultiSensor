@@ -1,7 +1,7 @@
-#ifndef _BD7411G_CPP
-#define _BD7411G_CPP
+#ifndef _ROHM_MULTI_SENSOR_BD7411G_CPP
+#define _ROHM_MULTI_SENSOR_BD7411G_CPP
 
-class BD7411G {
+class BD7411G: public Sensor {
   public:
     //Measurement variables
     bool magField = false; //magnetic field presence

@@ -1,10 +1,10 @@
-#ifndef _BD1020HFV_CPP
-#define _BD1020HFV_CPP
+#ifndef _ROHM_MULTI_SENSOR_BD1020HFV_CPP
+#define _ROHM_MULTI_SENSOR_BD1020HFV_CPP
 
 #define ANALOG_1  A0
 #define ANALOG_2  A2
 
-class BD1020HFV {
+class BD1020HFV: public Sensor {
   public:
     //Measurement variables
     float temp = 0; //temperature in deg. C

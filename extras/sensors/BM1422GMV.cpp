@@ -1,5 +1,5 @@
-#ifndef _BM1422GMV_CPP
-#define _BM1422GMV_CPP
+#ifndef _ROHM_MULTI_SENSOR_BM1422GMV_CPP
+#define _ROHM_MULTI_SENSOR_BM1422GMV_CPP
 
 //BM1422GMV register map
 #define BM1422GMV_REG_INFO_LSB                        0x0D
@@ -76,7 +76,7 @@
 #define BM1422GMV_AVERAGE_8                             0b00001100 // 4     2                                         8
 #define BM1422GMV_AVERAGE_16                            0b00010000 // 4     2                                         16
 
-class BM1422GMV {
+class BM1422GMV: public Sensor {
   public:
     //Measurement variables
     float magX = 0; //X-axis magnetic induction in uT
@@ -92,7 +92,7 @@ class BM1422GMV {
     //Initialization function
     uint8_t init(void func(void), uint8_t mode = BM1422GMV_MODE_SINGLE, uint8_t rate = BM1422GMV_OUTPUT_RATE_20_HZ, uint8_t output = BM1422GMV_OUTPUT_14_BIT, uint8_t avg = BM1422GMV_AVERAGE_4) {
       //check manufacturer ID
-      if(_utils.getRegValue(_address, BM1422GMV_REG_WHO_AM_I) != BM1422GMV_WHO_AM_I) {
+      if(getRegValue(_address, BM1422GMV_REG_WHO_AM_I) != BM1422GMV_WHO_AM_I) {
         //if the manufacturer ID does not match cancel initialization
         return(1);
       }
@@ -111,11 +111,11 @@ class BM1422GMV {
       if(mode == BM1422GMV_MODE_SINGLE) {
         //single mode: the measurements will be only taken when the measurement function is called, rate is ignored
         //set control registers according to datasheet and user settings
-        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_1, BM1422GMV_ACTIVE | output | mode);
-        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_MSB, 0x00);
-        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_4_LSB, 0x00);
-        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_HIGH, 3, 2);
-        _utils.setRegValue(_address, BM1422GMV_REG_AVE_A, BM1422GMV_AVERAGE_4, 4, 2);
+        setRegValue(_address, BM1422GMV_REG_CNTL_1, BM1422GMV_ACTIVE | output | mode);
+        setRegValue(_address, BM1422GMV_REG_CNTL_4_MSB, 0x00);
+        setRegValue(_address, BM1422GMV_REG_CNTL_4_LSB, 0x00);
+        setRegValue(_address, BM1422GMV_REG_CNTL_2, BM1422GMV_DRDY_ON | BM1422GMV_DRDY_ACTIVE_HIGH, 3, 2);
+        setRegValue(_address, BM1422GMV_REG_AVE_A, BM1422GMV_AVERAGE_4, 4, 2);
       } else if(mode == BM1422GMV_MODE_CONTINUOUS) {
         //TODO: implement continuous mode
       }
@@ -129,13 +129,13 @@ class BM1422GMV {
       //if interrupts are used, check DRDY flag
       if(_intNum != INT_NONE) {
         //start new measurement
-        _utils.setRegValue(_address, BM1422GMV_REG_CNTL_3, BM1422GMV_FORCE_MEASUREMENT, 6, 6);
+        setRegValue(_address, BM1422GMV_REG_CNTL_3, BM1422GMV_FORCE_MEASUREMENT, 6, 6);
         
         //if the flag is present, read measured values and calculate magnetic induction in uT
         if(_flagDrdy) {
-          magX = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
-          magY = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
-          magZ = (float)(((int16_t)_utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_MSB) << 8) | _utils.getRegValue(_address, BM1422GMV_REG_DATA_Z_LSB)) / _outputSens;
+          magX = (float)(((int16_t)getRegValue(_address, BM1422GMV_REG_DATA_X_MSB) << 8) | getRegValue(_address, BM1422GMV_REG_DATA_X_LSB)) / _outputSens;
+          magY = (float)(((int16_t)getRegValue(_address, BM1422GMV_REG_DATA_Y_MSB) << 8) | getRegValue(_address, BM1422GMV_REG_DATA_Y_LSB)) / _outputSens;
+          magZ = (float)(((int16_t)getRegValue(_address, BM1422GMV_REG_DATA_Z_MSB) << 8) | getRegValue(_address, BM1422GMV_REG_DATA_Z_LSB)) / _outputSens;
           
           //reset flag
           _flagDrdy = false;
@@ -156,7 +156,6 @@ class BM1422GMV {
     }
     
   private:
-    utilities _utils;
     uint8_t _address, _intNum;
     uint8_t _outputSens = 24;
     volatile bool _flagDrdy = false;

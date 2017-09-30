@@ -1,5 +1,5 @@
-#ifndef _BH1745NUC_CPP
-#define _BH1745NUC_CPP
+#ifndef _ROHM_MULTI_SENSOR_BH1745NUC_CPP
+#define _ROHM_MULTI_SENSOR_BH1745NUC_CPP
 
 //BH1745NUC register map
 #define BH1745NUC_REG_SYSTEM_CONTROL                  0x40
@@ -47,7 +47,7 @@
 //BH1745NUC_REG_MODE_CONTROL_3
 #define BH1745NUC_MODE_CONTROL_3                      0b00000010
 
-class BH1745NUC {
+class BH1745NUC: public Sensor {
   public:
     //Measurement variables
     uint16_t red = 0; //red value as a 16-bit integer
@@ -63,15 +63,15 @@ class BH1745NUC {
     //Initialization function
     uint8_t init(uint8_t measurementTime = BH1745NUC_MEAS_TIME_160_MS) {
       //check manufacturer and part ID
-      if((_utils.getRegValue(_address, BH1745NUC_REG_SYSTEM_CONTROL, 5, 0) != BH1745NUC_PART_ID) || (_utils.getRegValue(_address, BH1745NUC_REG_MANUFACTURER_ID) != BH1745NUC_MANUFACTURER_ID)) {
+      if((getRegValue(_address, BH1745NUC_REG_SYSTEM_CONTROL, 5, 0) != BH1745NUC_PART_ID) || (getRegValue(_address, BH1745NUC_REG_MANUFACTURER_ID) != BH1745NUC_MANUFACTURER_ID)) {
         //if the IDs do not match cancel initialization
         return(1);
       }
       
       //set control registers according to datasheet and user settings
-      _utils.setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_1, measurementTime, 2, 0);
-      _utils.setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_2, BH1745NUC_RGBC_ON | BH1745NUC_ADC_GAIN_16, 4, 0);
-      _utils.setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_3, BH1745NUC_MODE_CONTROL_3);;
+      setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_1, measurementTime, 2, 0);
+      setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_2, BH1745NUC_RGBC_ON | BH1745NUC_ADC_GAIN_16, 4, 0);
+      setRegValue(_address, BH1745NUC_REG_MODE_CONTROL_3, BH1745NUC_MODE_CONTROL_3);;
       
       return(0);
     }
@@ -81,17 +81,16 @@ class BH1745NUC {
       //TODO: implement interrupt
       
       //read measured RGBC value
-      red = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_RED_DATA_LSB);
-      green = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_GREEN_DATA_LSB);
-      blue = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_BLUE_DATA_LSB);
-      clear = ((uint16_t)_utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_MSB) << 8) | _utils.getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_LSB);
+      red = ((uint16_t)getRegValue(_address, BH1745NUC_REG_RED_DATA_MSB) << 8) | getRegValue(_address, BH1745NUC_REG_RED_DATA_LSB);
+      green = ((uint16_t)getRegValue(_address, BH1745NUC_REG_GREEN_DATA_MSB) << 8) | getRegValue(_address, BH1745NUC_REG_GREEN_DATA_LSB);
+      blue = ((uint16_t)getRegValue(_address, BH1745NUC_REG_BLUE_DATA_MSB) << 8) | getRegValue(_address, BH1745NUC_REG_BLUE_DATA_LSB);
+      clear = ((uint16_t)getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_MSB) << 8) | getRegValue(_address, BH1745NUC_REG_CLEAR_DATA_LSB);
       
       //color values were successfully updated, return 0
       return(0);
     }
   
   private:
-    utilities _utils;
     uint8_t _address;
 };
 

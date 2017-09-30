@@ -1,10 +1,10 @@
-#ifndef _UTILITIES_CPP
-#define _UTILITIES_CPP
+#ifndef _ROHM_MULTI_SENSOR_SENSOR_CPP
+#define _ROHM_MULTI_SENSOR_SENSOR_CPP
 
-class utilities {
+class Sensor {
   public:
     //Default constructor
-    utilities(void) {}
+    Sensor(void) {}
     
     //Function for getting specific bits in register
     //this function will only read bit range from msb to lsb, the returned value will be zero-padded

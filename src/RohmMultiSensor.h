@@ -9,7 +9,7 @@
 
   #include <Wire.h>
   
-  #include "../extras/sensors/utilities.cpp"
+  #include "../extras/sensors/Sensor.cpp"
 
   #ifdef INCLUDE_ALL_SENSORS
     #define INCLUDE_KX022_1020

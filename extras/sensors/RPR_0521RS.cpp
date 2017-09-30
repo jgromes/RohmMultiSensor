@@ -1,5 +1,5 @@
-#ifndef _RPR_0521RS_CPP
-#define _RPR_0521RS_CPP
+#ifndef _ROHM_MULTI_SENSOR_RPR_0521RS_CPP
+#define _ROHM_MULTI_SENSOR_RPR_0521RS_CPP
 
 //RPR_0521RS register map
 #define RPR_0521RS_REG_SYSTEM_CONTROL                 0x40
@@ -71,7 +71,7 @@
 #define RPR_0521RS_PS_GAIN_2                          0b00010000  //  5     4               x2
 #define RPR_0521RS_PS_GAIN_4                          0b00100000  //  5     4               x4
 
-class RPR_0521RS {
+class RPR_0521RS: public Sensor {
   public:
     //Measurement variables
     uint16_t prox = 0; //proximity value
@@ -85,15 +85,15 @@ class RPR_0521RS {
     //Initialization function
     uint8_t init(uint8_t measurementTime = RPR_0521RS_MEAS_TIME_100_MS_100_MS, uint8_t ledCurrent = RPR_0521RS_LED_CURRENT_100_MA) {
       //check manufacturer and part ID
-      if((_utils.getRegValue(_address, RPR_0521RS_REG_SYSTEM_CONTROL, 5, 0) != RPR_0521RS_PART_ID) || (_utils.getRegValue(_address, RPR_0521RS_REG_MANUFACT_ID) != RPR_0521RS_MANUFACT_ID)) {
+      if((getRegValue(_address, RPR_0521RS_REG_SYSTEM_CONTROL, 5, 0) != RPR_0521RS_PART_ID) || (getRegValue(_address, RPR_0521RS_REG_MANUFACT_ID) != RPR_0521RS_MANUFACT_ID)) {
         //if the IDs do not match cancel initialization
         return(1);
       }
       
       //set control registers according to datasheet and user settings
-      _utils.setRegValue(_address, RPR_0521RS_REG_ALS_PS_CONTROL, RPR_0521RS_ALS_DATA0_GAIN_1 | RPR_0521RS_ALS_DATA1_GAIN_1 | ledCurrent);
-      _utils.setRegValue(_address, RPR_0521RS_REG_PS_CONTROL, RPR_0521RS_PS_GAIN_1, 5, 4);
-      _utils.setRegValue(_address, RPR_0521RS_REG_MODE_CONTROL, RPR_0521RS_ALS_ON | RPR_0521RS_PS_ON | measurementTime);
+      setRegValue(_address, RPR_0521RS_REG_ALS_PS_CONTROL, RPR_0521RS_ALS_DATA0_GAIN_1 | RPR_0521RS_ALS_DATA1_GAIN_1 | ledCurrent);
+      setRegValue(_address, RPR_0521RS_REG_PS_CONTROL, RPR_0521RS_PS_GAIN_1, 5, 4);
+      setRegValue(_address, RPR_0521RS_REG_MODE_CONTROL, RPR_0521RS_ALS_ON | RPR_0521RS_PS_ON | measurementTime);
       
       //TODO: implement gain and measurement time selection
       //gain and measurement time arrays
@@ -119,8 +119,8 @@ class RPR_0521RS {
       float data0, data1, data1_0;
       
       //read raw 2-byte integer values
-      rawValue[0] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_LSB);
-      rawValue[1] = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_LSB);
+      rawValue[0] = ((uint16_t)getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_MSB) << 8) | getRegValue(_address, RPR_0521RS_REG_ALS_DATA0_LSB);
+      rawValue[1] = ((uint16_t)getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_MSB) << 8) | getRegValue(_address, RPR_0521RS_REG_ALS_DATA1_LSB);
       
       //intermediate calculations
       data0 = (float)rawValue[0] * (100 / _alsMeasurementTime) / _alsData0Gain;
@@ -146,13 +146,12 @@ class RPR_0521RS {
 
       //proximity measurement
       //read the proximity value (does not have a real unit, this will only tell you whether an object is closer than e.g. a few centimiters)
-      prox = ((uint16_t)_utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_MSB) << 8) | _utils.getRegValue(_address, RPR_0521RS_REG_PS_DATA_LSB); 
+      prox = ((uint16_t)getRegValue(_address, RPR_0521RS_REG_PS_DATA_MSB) << 8) | getRegValue(_address, RPR_0521RS_REG_PS_DATA_LSB); 
 
       return(0);
     }
   
   private:
-    utilities _utils;
     uint8_t _address;
     uint8_t _alsData0Gain = 1;
     uint8_t _alsData1Gain = 1;
