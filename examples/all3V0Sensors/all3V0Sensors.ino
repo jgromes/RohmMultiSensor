@@ -19,14 +19,14 @@
 #include <RohmMultiSensor.h>
 
 //instantiate all the sensors' classes
-KX022_1020 acc;
-BM1383GLV bar;
-RPR_0521RS als;
-BH1745NUC rgbc;
+KX022_1020 sensorAcc;
+BM1383GLV sensorPress;
+RPR_0521RS sensorAls;
+BH1745NUC sensorColor;
 // temperature sensor (BD1020HFV) is connected to ANALOG_1 header on the shield
-BD1020HFV temp(ANALOG_1);
+BD1020HFV sensorTmp(ANALOG_1);
 // temperature sensor (ML8511A) is connected to ANALOG_2 header on the shield
-ML8511A uvr(ANALOG_2);
+ML8511A sensorUV(ANALOG_2);
 
 void setup() {
   // begin serial communication
@@ -38,49 +38,49 @@ void setup() {
   Wire.begin();
 
   // initialize all the sensor with default settings
-  acc.init();
-  bar.init();
-  als.init();
-  rgbc.init();
-  temp.init();
-  uvr.init();
+  sensorAcc.init();
+  sensorPress.init();
+  sensorAls.init();
+  sensorColor.init();
+  sensorTmp.init();
+  sensorUV.init();
 
   Serial.println("X[g]\tY[g]\tZ[g]\tp[hPa]\tPS[cnt]\tALS[lx]\tR[-]\tG[-]\tB[-]\tC[-]\tt[dg C]\tUV[mW/cm^2]");
 }
 
 void loop() {
   // measure all the sensor values
-  acc.measure();
-  bar.measure();
-  als.measure();
-  rgbc.measure();
-  temp.measure();
-  uvr.measure();
+  sensorAcc.measure();
+  sensorPress.measure();
+  sensorAls.measure();
+  sensorColor.measure();
+  sensorTmp.measure();
+  sensorUV.measure();
 
   // print the values to the serial port
-  Serial.print(acc.x);
+  Serial.print(sensorAcc.accelX);
   Serial.print('\t');
-  Serial.print(acc.y);
+  Serial.print(sensorAcc.accelY);
   Serial.print('\t');
-  Serial.print(acc.z);
+  Serial.print(sensorAcc.accelZ);
   Serial.print('\t');
-  Serial.print(bar.p);
+  Serial.print(sensorPress.pres);
   Serial.print('\t');
-  Serial.print(als.ps);
+  Serial.print(sensorAls.prox);
   Serial.print('\t');
-  Serial.print(als.als);
+  Serial.print(sensorAls.ambLight);
   Serial.print('\t');
-  Serial.print(rgbc.r);
+  Serial.print(sensorColor.red);
   Serial.print('\t');
-  Serial.print(rgbc.g);
+  Serial.print(sensorColor.green);
   Serial.print('\t');
-  Serial.print(rgbc.b);
+  Serial.print(sensorColor.blue);
   Serial.print('\t');
-  Serial.print(rgbc.c);
+  Serial.print(sensorColor.clear);
   Serial.print('\t');
-  Serial.print(temp.t);
+  Serial.print(sensorTmp.temp);
   Serial.print('\t');
-  Serial.println(uvr.uv);
+  Serial.println(sensorUV.uvRad);
 
   // wait 100 ms before the next measurement
   delay(100);

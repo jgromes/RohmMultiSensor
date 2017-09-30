@@ -22,18 +22,18 @@
 
 // instantiate all the sensors' classes
 // KX022-1020 uses interrupt 0, BM1422GMV uses interrupt 1
-KX022_1020 acc(INT_0);
-BM1383GLV bar;
-BM1422GMV mag(INT_1);
+KX022_1020 sensorAcc(INT_0);
+BM1383GLV sensorPress;
+BM1422GMV sensorMag(INT_1);
 
 // define the interrupt service routine for KX022-1020
 void acc_isr(void) {
-  acc.setFlagDrdy();
+  sensorAcc.setFlagDrdy();
 }
 
 // define the interrupt service routine for BM1422GMV
 void mag_isr(void) {
-  mag.setFlagDrdy();
+  sensorMag.setFlagDrdy();
 }
 
 void setup() {
@@ -46,33 +46,33 @@ void setup() {
   Wire.begin();
 
   // initialize all the sensor with default settings
-  acc.init(acc_isr);
-  bar.init();
-  mag.init(mag_isr);
+  sensorAcc.init(acc_isr);
+  sensorPress.init();
+  sensorMag.init(mag_isr);
 
   Serial.println("X[g]\tY[g]\tZ[g]\tp[hPa]\tX[uT]\tY[uT]\tZ[uT]");
 }
 
 void loop() {
   // measure all the sensor values
-  acc.measure();
-  bar.measure();
-  mag.measure();
+  sensorAcc.measure();
+  sensorPress.measure();
+  sensorMag.measure();
 
   // print the values to the serial port
-  Serial.print(acc.x);
+  Serial.print(sensorAcc.accelX);
   Serial.print('\t');
-  Serial.print(acc.y);
+  Serial.print(sensorAcc.accelY);
   Serial.print('\t');
-  Serial.print(acc.z);
+  Serial.print(sensorAcc.accelZ);
   Serial.print('\t');
-  Serial.print(bar.p);
+  Serial.print(sensorPress.pres);
   Serial.print('\t');
-  Serial.print(mag.x);
+  Serial.print(sensorMag.magX);
   Serial.print('\t');
-  Serial.print(mag.y);
+  Serial.print(sensorMag.magY);
   Serial.print('\t');
-  Serial.println(mag.z);
+  Serial.println(sensorMag.magZ);
 
   // wait 100 ms before the next measurement
   delay(100);

@@ -15,8 +15,8 @@
 #include <RohmMultiSensor.h>
 
 //instantiate all the sensors' classes
-BD7411G hall;
-BD1020HFV temp;
+BD7411G sensorHall;
+BD1020HFV sensorTmp;
 
 void setup() {
   // begin serial communication
@@ -28,21 +28,21 @@ void setup() {
   Wire.begin();
 
   // initialize all the sensor with default settings
-  hall.init();
-  temp.init();
+  sensorHall.init();
+  sensorTmp.init();
 
   Serial.println("MF[-]\tt[dg C]");
 }
 
 void loop() {
   // measure all the sensor values
-  hall.measure();
-  temp.measure();
+  sensorHall.measure();
+  sensorTmp.measure();
 
   // print the values to the serial port
-  Serial.print(hall.mf);
+  Serial.print(sensorHall.magField);
   Serial.print('\t');
-  Serial.println(temp.t);
+  Serial.println(sensorTmp.temp);
 
   // wait 100 ms before the next measurement
   delay(100);
