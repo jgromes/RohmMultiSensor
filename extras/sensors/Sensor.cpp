@@ -14,7 +14,7 @@ class Sensor {
       }
       
       uint8_t rawValue = readRegister(deviceAddress, reg);
-      uint8_t maskedValue = rawValue & ((0b11111111 << lsb) & (0b11111111 >> (7 - msb)));
+      uint8_t maskedValue = rawValue & ((0b11111111 << lsb) | (0b11111111 >> (7 - msb)));
       
       return(maskedValue);
     }
@@ -27,7 +27,7 @@ class Sensor {
       }
       
       uint8_t currentValue = readRegister(deviceAddress, reg);
-      uint8_t newValue = currentValue & ((0b11111111 << (msb + 1)) & (0b11111111 >> (8 - lsb)));
+      uint8_t newValue = currentValue & ((0b11111111 << (msb + 1)) | (0b11111111 >> (8 - lsb)));
       
       writeRegister(deviceAddress, reg, newValue | value);
     }

@@ -189,10 +189,18 @@ class KX022_1020: public Sensor {
       _flagDrdy = false;
       
       //set control registers according to datasheet and user settings
-      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY | KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_ON | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF);
+      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_STANDBY, 7, 7);
+      delay(50); //wait for standby mode
+      setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_HIGH_RESOLUTION | KX022_1020_DATA_READY_ON | range | KX022_1020_TAP_DETECT_OFF | KX022_1020_WAKE_UP_OFF | KX022_1020_TILT_POSITION_OFF);
       setRegValue(_address, KX022_1020_REG_ODCNTL, KX022_1020_IIR_BYPASS_OFF | KX022_1020_LOW_PASS_FILTER_ODR_9 | rate);
       setRegValue(_address, KX022_1020_REG_INC1, KX022_1020_INT1_ENABLE | KX022_1020_INT1_ACTIVE_HIGH | KX022_1020_INT1_LATCH_OFF, 5, 3);
       setRegValue(_address, KX022_1020_REG_INC4, KX022_1020_INT1_DATA_READY_ON, 4, 4);
+      
+      Serial.println(getRegValue(_address, KX022_1020_REG_CNTL1), BIN);   //0b01101000
+      Serial.println(getRegValue(_address, KX022_1020_REG_ODCNTL), BIN);  //0b00000010
+      Serial.println(getRegValue(_address, KX022_1020_REG_INC1), BIN);    //0b00111000
+      Serial.println(getRegValue(_address, KX022_1020_REG_INC4), BIN);    //0b00010000
+      
       setRegValue(_address, KX022_1020_REG_CNTL1, KX022_1020_OPERATE, 7, 7);
       
       //set sensitivity according to user settings
