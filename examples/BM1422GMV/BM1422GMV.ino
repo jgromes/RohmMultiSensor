@@ -6,9 +6,6 @@
  * Before powering up your Arduino, make sure to select 1.8V on jumper J15 on the shield!
  */
 
-// define the sensor we will use
-#define INCLUDE_BM1422GMV
-
 // include the library
 #include <RohmMultiSensor.h>
 

@@ -6,9 +6,6 @@
  * Before powering up your Arduino, make sure to select 3V or 5V on jumper J15 on the shield!
  */
 
-// define the sensor we will use
-#define INCLUDE_BD1020HFV
-
 // include the library
 #include <RohmMultiSensor.h>
 

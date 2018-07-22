@@ -9,9 +9,6 @@
  * Also, connect the red VLED cable to 5V pin.
  */
 
-// define the sensor we will use
-#define INCLUDE_BH1790GLC
-
 // include the library
 #include <RohmMultiSensor.h>
 

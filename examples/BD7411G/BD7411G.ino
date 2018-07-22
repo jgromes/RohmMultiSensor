@@ -6,9 +6,6 @@
  * Before powering up your Arduino, make sure to select 5V on jumper J15 on the shield!
  */
 
-// define all the sensors we will use
-#define INCLUDE_BD7411G
-
 // include the library
 #include <RohmMultiSensor.h>
 

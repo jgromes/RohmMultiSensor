@@ -6,9 +6,6 @@
  * Before powering up your Arduino, make sure to select 1.8V or 3V on jumper J15 on the shield!
  */
 
-// define the sensor we will use
-#define INCLUDE_KX022_1020
-
 // include the library
 #include <RohmMultiSensor.h>
 

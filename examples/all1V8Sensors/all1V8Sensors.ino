@@ -14,9 +14,6 @@
  *                    
  */
 
-// define all the sensors we will use
-#define INCLUDE_ALL_1V8_SENSORS
-
 // include the library
 #include <RohmMultiSensor.h>
 
