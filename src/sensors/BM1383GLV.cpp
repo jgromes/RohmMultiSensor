@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_BM1383GLV_CPP
 #define _ROHM_MULTI_SENSOR_BM1383GLV_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 //BM1383GLV register map
 #define BM1383GLV_REG_ID                              0x10
 #define BM1383GLV_REG_RESET_CONTROL                   0x11

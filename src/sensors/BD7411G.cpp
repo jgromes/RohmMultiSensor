@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_BD7411G_CPP
 #define _ROHM_MULTI_SENSOR_BD7411G_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 class BD7411G: public Sensor {
   public:
     //Measurement variables

@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_BH1745NUC_CPP
 #define _ROHM_MULTI_SENSOR_BH1745NUC_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 //BH1745NUC register map
 #define BH1745NUC_REG_SYSTEM_CONTROL                  0x40
 #define BH1745NUC_REG_MODE_CONTROL_1                  0x41

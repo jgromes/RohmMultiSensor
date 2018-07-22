@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_BM1422GMV_CPP
 #define _ROHM_MULTI_SENSOR_BM1422GMV_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 //BM1422GMV register map
 #define BM1422GMV_REG_INFO_LSB                        0x0D
 #define BM1422GMV_REG_INFO_MSB                        0x0E

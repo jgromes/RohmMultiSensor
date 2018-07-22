@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_RPR_0521RS_CPP
 #define _ROHM_MULTI_SENSOR_RPR_0521RS_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 //RPR_0521RS register map
 #define RPR_0521RS_REG_SYSTEM_CONTROL                 0x40
 #define RPR_0521RS_REG_MODE_CONTROL                   0x41

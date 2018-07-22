@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_KX022_1020_CPP
 #define _ROHM_MULTI_SENSOR_KX022_1020_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 //KX022-1020 register map
 #define KX022_1020_REG_XHPL                           0x00
 #define KX022_1020_REG_XHPH                           0x01

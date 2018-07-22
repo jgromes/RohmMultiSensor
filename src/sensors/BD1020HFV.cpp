@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_BD1020HFV_CPP
 #define _ROHM_MULTI_SENSOR_BD1020HFV_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 #define ANALOG_1  A0
 #define ANALOG_2  A2
 

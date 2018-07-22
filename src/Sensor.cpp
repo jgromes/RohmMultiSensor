@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_SENSOR_CPP
 #define _ROHM_MULTI_SENSOR_SENSOR_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include <Wire.h>
+
 class Sensor {
   public:
     //Default constructor

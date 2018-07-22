@@ -1,6 +1,14 @@
 #ifndef _ROHM_MULTI_SENSOR_BH1790GLC_CPP
 #define _ROHM_MULTI_SENSOR_BH1790GLC_CPP
 
+#if ARDUINO >= 100
+  #include "Arduino.h"
+#else
+  #include "WProgram.h"
+#endif
+
+#include "Sensor.cpp"
+
 //BH1790GLC register map
 #define BH1790GLC_REG_MANUFACTURER_ID                 0x0F
 #define BH1790GLC_REG_PART_ID                         0x10
