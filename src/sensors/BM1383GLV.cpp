@@ -22,7 +22,7 @@
 #define BM1383GLV_REG_INT_CONTROL                     0x19
 #define BM1383GLV_REG_PRESSURE_MSB                    0x1C
 #define BM1383GLV_REG_PRESSURE_MID                    0x1D
-#define BM1383GLV_REG_PRESSURE_LSB                    0x1F
+#define BM1383GLV_REG_PRESSURE_LSB                    0x1E
 
 //BM1383GLV default values
 #define BM1383GLV_DEVICE_ADDRESS                      0x5D
@@ -55,12 +55,12 @@ class BM1383GLV: public Sensor {
   public:
     //Measurement variables
     float pres = 0; //pressure in hPa
-    
+
     //Default constructor
     BM1383GLV(uint8_t address = BM1383GLV_DEVICE_ADDRESS) {
       _address = address;
     }
-    
+
     //Initialization function
     uint8_t init(uint8_t mode = BM1383GLV_CONTINUOUS_200_MS, uint8_t avg = BM1383GLV_AVERAGE_64, uint8_t tempAvg = BM1383GLV_LESS_TEMP_ON) {
       //check manufacturer ID
@@ -68,30 +68,30 @@ class BM1383GLV: public Sensor {
         //if the manufacturer ID does not match cancel initialization
         return(1);
       }
-      
+
       //set control registers according to datasheet and user settings
       setRegValue(_address, BM1383GLV_REG_POWER_DOWN, BM1383GLV_ACTIVE, 0, 0);
       setRegValue(_address, BM1383GLV_REG_RESET, BM1383GLV_RSTB_ACTIVE, 0, 0);
       setRegValue(_address, BM1383GLV_REG_MODE_CONTROL, avg | tempAvg | mode);
-      
+
       return(0);
     }
-    
+
     //Measurement function
     uint8_t measure(void) {
       uint32_t rawValue;
-      
+
       //TODO: implement interrupt
-      
+
       //read the raw 4-byte value
       rawValue = (((uint32_t)getRegValue(_address, BM1383GLV_REG_PRESSURE_MSB) << 16) | ((uint32_t)getRegValue(_address, BM1383GLV_REG_PRESSURE_MID) << 8) | getRegValue(_address, BM1383GLV_REG_PRESSURE_LSB, 7, 2)) >> 2;
-      
+
       //calcute real pressure in hPa
       pres = rawValue / 2048.0;
-      
+
       return(0);
     }
-  
+
   private:
     uint8_t _address;
 };
